@@ -2,6 +2,7 @@ import { useState } from "react";
 import reactLogo from "./assets/react.svg";
 import { invoke } from "@tauri-apps/api/core";
 import "./App.css";
+import MainScrren from "./MainScrren";
 
 function App() {
   const [greetMsg, setGreetMsg] = useState("");
@@ -42,8 +43,10 @@ function App() {
           placeholder="Enter a name..."
         />
         <button type="submit">Greet</button>
+        <p className=" text-red-700">Test Taliwind css</p>
       </form>
       <p>{greetMsg}</p>
+      <MainScrren/>
     </main>
   );
 }
