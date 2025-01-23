@@ -28,7 +28,7 @@ const TextPlace = () => {
         ref={textareaRef}
         value={inputText}
         onChange={handleTextChange}
-        className='resize-none w-full bg-inherit overflow-hidden'
+        className='resize-none w-full bg-inherit overflow-hidden p-1'
       />
     </div>
   )
