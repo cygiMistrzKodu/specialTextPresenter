@@ -5,16 +5,20 @@ const TextPlace = () => {
   const [inputText, setText] = useState('');
   const textareaRef: RefObject<HTMLTextAreaElement> = useRef(null);
 
-  const handleChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
+  const handleTextChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
     setText(event.target.value);
   };
 
-  useEffect( () => {
-    if(textareaRef.current) {
+  const adjustContainerHeight = () => {
+    if (textareaRef.current) {
       textareaRef.current.style.height = 'auto';
       textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
     }
-  });
+  }
+
+  useEffect(() => {
+    adjustContainerHeight();
+  }, [inputText]);
 
   return (
     <div className="w-36 rounded  shadow-lg bg-green-700
@@ -23,7 +27,7 @@ const TextPlace = () => {
       <textarea
         ref={textareaRef}
         value={inputText}
-        onChange={handleChange}
+        onChange={handleTextChange}
         className='resize-none w-full bg-inherit overflow-hidden'
       />
     </div>
