@@ -12,7 +12,7 @@ const MainScrren = () => {
       <h1 className='text-3xl font-bold underline text-yellow-500 text-center'>
         Wpisuj swój tekst
       </h1>
-      <div className='flex flex-wrap justify-start items-start p-2'>
+      <div className='flex flex-wrap justify-start items-start p-2 m-1'>
         <TextPlace  />
         <TextPlace  />
         <TextPlace  />

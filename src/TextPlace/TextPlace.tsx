@@ -23,13 +23,25 @@ const TextPlace = () => {
   return (
     <div className="w-36 rounded  shadow-lg bg-green-700
      text-white border border-yellow-500
-     hover:bg-green-950 hover:shadow-2xl min-w-[100px] min-h-[50px] m-0 break-words">
-      <textarea
-        ref={textareaRef}
-        value={inputText}
-        onChange={handleTextChange}
-        className='resize-none w-full bg-inherit overflow-hidden p-1'
-      />
+     hover:bg-green-950 hover:shadow-2xl min-w-[200px] min-h-[50px] m-1 break-words p-2 ">
+      <div className='flex justify-between items-start'>
+        <textarea
+          ref={textareaRef}
+          value={inputText}
+          onChange={handleTextChange}
+          className='resize-none w-full bg-inherit overflow-hidden p-1 font-thin m-1'
+          placeholder='Wpisz text'
+        />
+        <label className="swap swap-flip">
+          <input type="checkbox" />
+          <div className="swap-on">👍</div>
+          <div className="swap-off">TO DO</div>
+        </label>
+      </div>
+      <div className='flex justify-between'>
+        <button className='btn btn-xs  btn-accent ' >Copy</button>
+        <button className='btn btn-xs btn-error' >Clean</button>
+      </div>
     </div>
   )
 }
