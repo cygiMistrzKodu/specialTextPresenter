@@ -1,10 +1,14 @@
 import React, { RefObject, useEffect, useRef, useState } from "react";
 import Copy from "../Copy";
 import Clear from "../Clear";
+import ToDo from "../ToDo";
 
 const Task = () => {
   const [taskInfo, setTaskInfo] = useState("");
   const taskInfoRef: RefObject<HTMLTextAreaElement> = useRef(null);
+
+  const [isDone, setIsDone] = useState(false);
+  const [taskBgColor, setTaskBgColor] = useState("bg-green-700");
 
   const taskInfoChange = (event: {
     target: { value: React.SetStateAction<string> };
@@ -22,21 +26,6 @@ const Task = () => {
   useEffect(() => {
     adjustTaskHeight();
   }, [taskInfo]);
-  
-  const [isDone, setIsDone] = useState(false);
-  const [taskBgColor, setTaskBgColor] = useState("bg-green-700");
-
-  const isTaskDone = (event: {
-    target: { checked: boolean | ((prevState: boolean) => boolean) };
-  }) => {
-    setIsDone(event.target.checked);
-
-    if (event.target.checked) {
-      setTaskBgColor("bg-black");
-    } else {
-      setTaskBgColor("bg-green-700");
-    }
-  };
 
   return (
     <div
@@ -52,11 +41,11 @@ const Task = () => {
           className="resize-none w-full bg-inherit overflow-hidden p-1 font-thin m-1"
           placeholder="Wpisz text"
         />
-        <label className="swap swap-flip">
-          <input type="checkbox" checked={isDone} onChange={isTaskDone} />
-          <div className="swap-on">👍</div>
-          <div className="swap-off">TO DO</div>
-        </label>
+        <ToDo
+          isDone={isDone}
+          setIsDone={setIsDone}
+          setTaskBgColor={setTaskBgColor}
+        ></ToDo>
       </div>
       <div className="flex justify-between">
         <Copy text={taskInfo} />
