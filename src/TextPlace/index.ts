@@ -1,3 +1,3 @@
-import TextPlace from './TextPlace';
+import Task from './Task';
 
-export default TextPlace;
+export default Task;

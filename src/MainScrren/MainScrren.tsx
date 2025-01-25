@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import TextPlace from '../TextPlace';
+import Task from '../TextPlace';
 
 const MainScrren = () => {
 
@@ -13,19 +13,19 @@ const MainScrren = () => {
         Wpisuj swój tekst
       </h1>
       <div className='flex flex-wrap justify-start items-start p-2 m-1'>
-        <TextPlace  />
-        <TextPlace  />
-        <TextPlace  />
-        <TextPlace  />
-        <TextPlace  />
-        <TextPlace  />
-        <TextPlace  />
-        <TextPlace  />
-        <TextPlace  />
-        <TextPlace  />
-        <TextPlace  />
-        <TextPlace  />
-        <TextPlace  />
+        <Task  />
+        <Task  />
+        <Task  />
+        <Task  />
+        <Task  />
+        <Task  />
+        <Task  />
+        <Task  />
+        <Task  />
+        <Task  />
+        <Task  />
+        <Task  />
+        <Task  />
       </div>
     </div>
 
