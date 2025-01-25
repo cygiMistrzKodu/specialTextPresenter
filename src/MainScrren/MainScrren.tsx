@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import Task from "../TextPlace";
+import Task from "../Task";
 
 const MainScrren = () => {
   useEffect(() => {

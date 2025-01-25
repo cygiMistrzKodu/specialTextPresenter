@@ -1,5 +1,6 @@
 import React, { RefObject, useEffect, useRef, useState } from "react";
 import Copy from "../Copy";
+import Clear from "../Clear";
 
 const Task = () => {
   const [taskInfo, setTaskInfo] = useState("");
@@ -21,11 +22,7 @@ const Task = () => {
   useEffect(() => {
     adjustTaskHeight();
   }, [taskInfo]);
-
-  const clearTaskInfo = () => {
-    setTaskInfo("");
-  };
-
+  
   const [isDone, setIsDone] = useState(false);
   const [taskBgColor, setTaskBgColor] = useState("bg-green-700");
 
@@ -63,9 +60,7 @@ const Task = () => {
       </div>
       <div className="flex justify-between">
         <Copy text={taskInfo} />
-        <button className="btn btn-xs btn-error" onClick={clearTaskInfo}>
-          Clean
-        </button>
+        <Clear state={setTaskInfo} />
       </div>
     </div>
   );
