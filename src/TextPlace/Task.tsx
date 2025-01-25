@@ -1,56 +1,59 @@
-import React, { RefObject, useEffect, useRef, useState } from 'react';
-import Copy from '../Copy';
+import React, { RefObject, useEffect, useRef, useState } from "react";
+import Copy from "../Copy";
 
 const Task = () => {
-
-  const [taskInfo, setTaskInfo] = useState('');
+  const [taskInfo, setTaskInfo] = useState("");
   const taskInfoRef: RefObject<HTMLTextAreaElement> = useRef(null);
 
-  const taskInfoChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
+  const taskInfoChange = (event: {
+    target: { value: React.SetStateAction<string> };
+  }) => {
     setTaskInfo(event.target.value);
   };
 
   const adjustTaskHeight = () => {
     if (taskInfoRef.current) {
-      taskInfoRef.current.style.height = 'auto';
+      taskInfoRef.current.style.height = "auto";
       taskInfoRef.current.style.height = `${taskInfoRef.current.scrollHeight}px`;
     }
-  }
+  };
 
   useEffect(() => {
     adjustTaskHeight();
   }, [taskInfo]);
 
   const clearTaskInfo = () => {
-    setTaskInfo('');
-  }
+    setTaskInfo("");
+  };
 
   const [isDone, setIsDone] = useState(false);
-  const [taskBgColor, setTaskBgColor] = useState('bg-green-700')
+  const [taskBgColor, setTaskBgColor] = useState("bg-green-700");
 
-  const isTaskDone = (event: { target: { checked: boolean | ((prevState: boolean) => boolean); }; }) => {
+  const isTaskDone = (event: {
+    target: { checked: boolean | ((prevState: boolean) => boolean) };
+  }) => {
     setIsDone(event.target.checked);
 
     if (event.target.checked) {
-      setTaskBgColor('bg-black');
-
+      setTaskBgColor("bg-black");
     } else {
-      setTaskBgColor('bg-green-700');
+      setTaskBgColor("bg-green-700");
     }
-
-  }
+  };
 
   return (
-    <div className={`w-36 rounded  shadow-lg  ${taskBgColor}
+    <div
+      className={`w-36 rounded  shadow-lg  ${taskBgColor}
      text-white border border-yellow-500
-     hover:bg-green-950 hover:shadow-2xl min-w-[200px] min-h-[50px] m-1 break-words p-2`}>
-      <div className='flex justify-between items-start'>
+     hover:bg-green-950 hover:shadow-2xl min-w-[200px] min-h-[50px] m-1 break-words p-2`}
+    >
+      <div className="flex justify-between items-start">
         <textarea
           ref={taskInfoRef}
           value={taskInfo}
           onChange={taskInfoChange}
-          className='resize-none w-full bg-inherit overflow-hidden p-1 font-thin m-1'
-          placeholder='Wpisz text'
+          className="resize-none w-full bg-inherit overflow-hidden p-1 font-thin m-1"
+          placeholder="Wpisz text"
         />
         <label className="swap swap-flip">
           <input type="checkbox" checked={isDone} onChange={isTaskDone} />
@@ -58,12 +61,14 @@ const Task = () => {
           <div className="swap-off">TO DO</div>
         </label>
       </div>
-      <div className='flex justify-between'>
+      <div className="flex justify-between">
         <Copy text={taskInfo} />
-        <button className='btn btn-xs btn-error' onClick={clearTaskInfo} >Clean</button>
+        <button className="btn btn-xs btn-error" onClick={clearTaskInfo}>
+          Clean
+        </button>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default Task;
