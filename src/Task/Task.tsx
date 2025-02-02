@@ -2,6 +2,7 @@ import React, { RefObject, useEffect, useRef, useState } from "react";
 import Copy from "../Copy";
 import Clear from "../Clear";
 import ToDo from "../ToDo";
+import { invoke } from "@tauri-apps/api/core";
 
 const Task = () => {
   const [taskInfo, setTaskInfo] = useState("");
@@ -27,6 +28,10 @@ const Task = () => {
     adjustTaskHeight();
   }, [taskInfo]);
 
+  const sendToBackend = async () => {
+    await invoke("write_container_content", { taskContent: taskInfo });
+  };
+
   return (
     <div
       className={`w-36 rounded  shadow-lg  ${taskBgColor}
@@ -50,6 +55,9 @@ const Task = () => {
       <div className="flex justify-between">
         <Copy text={taskInfo} />
         <Clear state={setTaskInfo} />
+        <button className="btn btn-xs  btn-accent" onClick={sendToBackend}>
+          SendToBackend
+        </button>
       </div>
     </div>
   );
