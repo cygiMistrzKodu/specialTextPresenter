@@ -1,20 +1,29 @@
-import React, { RefObject, useEffect, useRef, useState } from "react";
+import React, {
+  RefObject,
+  useEffect,
+  useRef,
+  useState,
+  ChangeEvent,
+} from "react";
 import Copy from "../Copy";
 import Clear from "../Clear";
 import ToDo from "../ToDo";
 import { invoke } from "@tauri-apps/api/core";
 
-const Task = () => {
-  const [taskInfo, setTaskInfo] = useState("");
+interface TaskContentProps {
+  onChange: (taskContent: string) => void;
+}
+
+const Task: React.FC<TaskContentProps> = ({ onChange: onTaskInfoChange }) => {
+  const [taskInfo,  setTaskInfo] = useState("");
   const taskInfoRef: RefObject<HTMLTextAreaElement> = useRef(null);
 
   const [isDone, setIsDone] = useState(false);
   const [taskBgColor, setTaskBgColor] = useState("bg-green-700");
 
-  const taskInfoChange = (event: {
-    target: { value: React.SetStateAction<string> };
-  }) => {
+  const taskInfoChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     setTaskInfo(event.target.value);
+    onTaskInfoChange(event.target.value); 
   };
 
   const adjustTaskHeight = () => {
@@ -54,7 +63,7 @@ const Task = () => {
       </div>
       <div className="flex justify-between">
         <Copy text={taskInfo} />
-        <Clear state={setTaskInfo} />
+        <Clear state={setTaskInfo} onClear={onTaskInfoChange} />
         <button className="btn btn-xs  btn-accent" onClick={sendToBackend}>
           SendToBackend
         </button>
