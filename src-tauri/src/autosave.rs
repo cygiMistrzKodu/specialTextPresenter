@@ -25,9 +25,20 @@ impl Task {
 
     pub fn save_content(
         file_path: &str,
-        content: &Vec<Task>,
+        content: Option<Vec<Option<Task>>>,
     ) -> Result<(), Box<dyn std::error::Error>> {
-        let contents = serde_json::to_string_pretty(content)?;
+        let content_null_save: Vec<Task> = content
+            .unwrap_or_default()
+            .into_iter()
+            .map(|task| match task {
+                Some(t) => t,
+                None => Task {
+                    content: "".to_string(),
+                },
+            })
+            .collect();
+
+        let task_contents = serde_json::to_string_pretty(&content_null_save)?;
 
         let path = Path::new(file_path);
         if let Some(path_directory) = path.parent() {
@@ -42,7 +53,7 @@ impl Task {
             e
         })?;
 
-        file.write_all(contents.as_bytes()).map_err(|e| {
+        file.write_all(task_contents.as_bytes()).map_err(|e| {
             error!("Nie można zapisać pliku: {}", e);
             e
         })?;
@@ -99,9 +110,9 @@ mod tests {
             content: "cost tam tekst 15".to_string(),
         };
 
-        let tasks = vec![task, task2];
+        let tasks = Some(vec![Some(task), Some(task2)]);
 
-        let _ = Task::save_content(&Task::get_default_save_file_patch(), &tasks);
+        let _ = Task::save_content(&Task::get_default_save_file_patch(), tasks);
     }
 
     #[test]

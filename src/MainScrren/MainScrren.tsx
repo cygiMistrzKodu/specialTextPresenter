@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import Task from "../Task";
 
+import { invoke } from "@tauri-apps/api/core";
+
 interface TaskContent {
   content: string;
 }
@@ -18,7 +20,11 @@ const MainScrren = () => {
     setTaskContents(newContents);
   };
 
-  const toSave = () => {
+  const toAutoSave = async () => {
+
+    
+    await invoke("auto_save_tasks", { taskContents });
+
     console.log(taskContents);
   };
 
@@ -43,7 +49,7 @@ const MainScrren = () => {
         <Task /> */}
       </div>
       <button
-        onClick={toSave}
+        onClick={toAutoSave}
         className="bg-gradient-to-r from-blue-500 to-blue-700 text-white px-4 py-2 rounded-lg shadow-lg
          hover:shadow-xl transform hover:scale-105 transition-transform duration-200"
       >

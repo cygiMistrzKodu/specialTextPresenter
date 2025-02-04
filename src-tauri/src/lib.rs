@@ -27,20 +27,9 @@ fn write_container_content(task_content: &str) {
 }
 
 #[tauri::command]
-fn auto_save_tasks(tasks: Vec<Task>) -> Result<(), String> {
-    // tutaj będzie jeszcze jakaś wartość do przekazania w parametrze lista danych z taska
-
-    // let task = Task {
-    //     content: "cost tam tekst 1".to_string(),
-    // };
-
-    // let task2 = Task {
-    //     content: "cost tam tekst 2".to_string(),
-    // };
-
-    // let tasks = vec![task, task2];
-
-    Task::save_content(&Task::get_default_save_file_patch(), &tasks).map_err(|e| e.to_string())?;
+fn auto_save_tasks(task_contents: Option<Vec<Option<Task>>>) -> Result<(), String> {
+    Task::save_content(&Task::get_default_save_file_patch(), task_contents)
+        .map_err(|e| e.to_string())?;
 
     Ok(())
 }
