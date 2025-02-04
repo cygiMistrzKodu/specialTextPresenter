@@ -5,7 +5,7 @@ use std::fs::{create_dir_all, File};
 use std::io::{Read, Write};
 use std::path::Path;
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Task {
     pub content: String,
 }
@@ -15,7 +15,7 @@ impl Task {
         return env::var("APPDATA").map_err(|e| e.to_string()).unwrap();
     }
 
-    fn get_deafult_saving_path() -> String {
+    fn get_deafult_saving_directory_part() -> String {
         return r"textPresenter\autoSavings".to_string();
     }
 
@@ -65,18 +65,20 @@ impl Task {
         return format!(
             "{}\\{}",
             Task::get_appdata_path(),
-            Task::get_deafult_saving_path()
+            Task::get_deafult_saving_directory_part()
         );
     }
 
-    pub fn get_default_save_file_patch() -> String {
+    pub fn get_default_save_file() -> String {
         return Task::make_save_file_patch(
             Task::get_deafult_directory(),
             "atuoSaving.json".to_string(),
         );
     }
 
-    pub fn read_auto_save_content(file_path: &str) -> serde_json::Result<Vec<Task>> {
+    pub fn read_auto_save_content(
+        file_path: &str,
+    ) -> Result<Vec<Task>, Box<dyn std::error::Error>> {
         let mut file = File::open(file_path).unwrap();
         let mut content = String::new();
         file.read_to_string(&mut content).unwrap(); // skonczyłem jak obsłużyć bład wrócę tutaj potem
@@ -100,7 +102,7 @@ mod tests {
 
     #[test]
     fn make_save_file_manula_test() {
-        print!("{}", Task::get_default_save_file_patch());
+        print!("{}", Task::get_default_save_file());
 
         let task = Task {
             content: "cost tam tekst 19".to_string(),
@@ -112,7 +114,7 @@ mod tests {
 
         let tasks = Some(vec![Some(task), Some(task2)]);
 
-        let _ = Task::save_content(&Task::get_default_save_file_patch(), tasks);
+        let _ = Task::save_content(&Task::get_default_save_file(), tasks);
     }
 
     #[test]
@@ -129,8 +131,21 @@ mod tests {
     #[test]
     fn default_saving_path_is_right_test() {
         assert_eq!(
-            Task::get_deafult_saving_path(),
+            Task::get_deafult_saving_directory_part(),
             r"textPresenter\autoSavings"
         );
+    }
+
+    #[test]
+    fn read_auto_save_content_manual() {
+
+        match Task::read_auto_save_content(&Task::get_default_save_file()) {
+            Ok(tasks) => {
+                for task in tasks {
+                    print!("{:?}", task);
+                }
+            }
+            Err(e) => eprint!("error reading file: {:?}", e),
+        }
     }
 }

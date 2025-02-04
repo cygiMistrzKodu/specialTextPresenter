@@ -28,8 +28,7 @@ fn write_container_content(task_content: &str) {
 
 #[tauri::command]
 fn auto_save_tasks(task_contents: Option<Vec<Option<Task>>>) -> Result<(), String> {
-    Task::save_content(&Task::get_default_save_file_patch(), task_contents)
+    Task::save_content(&Task::get_default_save_file(), task_contents)
         .map_err(|e| e.to_string())?;
-
     Ok(())
 }
