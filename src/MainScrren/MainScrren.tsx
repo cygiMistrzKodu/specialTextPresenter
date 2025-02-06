@@ -37,6 +37,22 @@ const MainScrren = () => {
       <h1 className="text-3xl font-bold underline text-yellow-500 text-center">
         Wpisuj swój tekst
       </h1>
+      <div className="flex  gap-2 m-2">
+        <button
+          onClick={toAutoSave}
+          className="bg-gradient-to-r from-blue-500 to-blue-700 text-white px-4 py-2 rounded-lg shadow-lg
+         hover:shadow-xl transform hover:scale-105 transition-transform duration-200"
+        >
+          Test zapisu
+        </button>
+        <button
+          onClick={readAutoSave}
+          className="bg-gradient-to-r from-amber-500 to-amber-700 text-white px-4 py-2 rounded-lg shadow-lg
+         hover:shadow-xl transform hover:scale-105 transition-transform duration-200"
+        >
+          Test odczytu
+        </button>
+      </div>
       <div className="flex flex-wrap justify-start items-start p-2 m-1">
         <Task onChange={(content) => taskInfoChange(0, content)} setContent={taskContents[0] ? taskContents[0].content : '' } />
         <Task onChange={(content) => taskInfoChange(1, content)}  setContent={taskContents[1]? taskContents[1].content : ''}/>
@@ -59,22 +75,6 @@ const MainScrren = () => {
         <Task onChange={(content) => taskInfoChange(18, content)}setContent={taskContents[18]? taskContents[18].content : ''}/>
         <Task onChange={(content) => taskInfoChange(19, content)}setContent={taskContents[19]? taskContents[19].content : ''}/>
         <Task onChange={(content) => taskInfoChange(20, content)}setContent={taskContents[20]? taskContents[20].content : ''}/>
-      </div>
-      <div className="flex flex-col w-1/4 gap-2 ml-2">
-        <button
-          onClick={toAutoSave}
-          className="bg-gradient-to-r from-blue-500 to-blue-700 text-white px-4 py-2 rounded-lg shadow-lg
-         hover:shadow-xl transform hover:scale-105 transition-transform duration-200"
-        >
-          Test zapisu
-        </button>
-        <button
-          onClick={readAutoSave}
-          className="bg-gradient-to-r from-amber-500 to-amber-700 text-white px-4 py-2 rounded-lg shadow-lg
-         hover:shadow-xl transform hover:scale-105 transition-transform duration-200"
-        >
-          Test odczytu
-        </button>
       </div>
     </div>
   );
