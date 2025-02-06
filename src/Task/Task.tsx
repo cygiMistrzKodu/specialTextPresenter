@@ -8,14 +8,17 @@ import React, {
 import Copy from "../Copy";
 import Clear from "../Clear";
 import ToDo from "../ToDo";
-import { invoke } from "@tauri-apps/api/core";
 
 interface TaskContentProps {
   onChange: (taskContent: string) => void;
+  setContent: string;
 }
 
-const Task: React.FC<TaskContentProps> = ({ onChange: onTaskInfoChange }) => {
-  const [taskInfo,  setTaskInfo] = useState("");
+const Task: React.FC<TaskContentProps> = ({
+  onChange: onTaskInfoChange,
+  setContent: content, 
+}) => {
+  const [taskInfo, setTaskInfo] = useState("");
   const taskInfoRef: RefObject<HTMLTextAreaElement> = useRef(null);
 
   const [isDone, setIsDone] = useState(false);
@@ -23,8 +26,12 @@ const Task: React.FC<TaskContentProps> = ({ onChange: onTaskInfoChange }) => {
 
   const taskInfoChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     setTaskInfo(event.target.value);
-    onTaskInfoChange(event.target.value); 
+    onTaskInfoChange(event.target.value);
   };
+
+  useEffect(() => {
+    setTaskInfo(content);
+  }, [content]);
 
   const adjustTaskHeight = () => {
     if (taskInfoRef.current) {
@@ -36,10 +43,6 @@ const Task: React.FC<TaskContentProps> = ({ onChange: onTaskInfoChange }) => {
   useEffect(() => {
     adjustTaskHeight();
   }, [taskInfo]);
-
-  const sendToBackend = async () => {
-    await invoke("write_container_content", { taskContent: taskInfo });
-  };
 
   return (
     <div
@@ -64,9 +67,6 @@ const Task: React.FC<TaskContentProps> = ({ onChange: onTaskInfoChange }) => {
       <div className="flex justify-between">
         <Copy text={taskInfo} />
         <Clear state={setTaskInfo} onClear={onTaskInfoChange} />
-        <button className="btn btn-xs  btn-accent" onClick={sendToBackend}>
-          SendToBackend
-        </button>
       </div>
     </div>
   );
