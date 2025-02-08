@@ -43,18 +43,18 @@ impl Task {
         let path = Path::new(file_path);
         if let Some(path_directory) = path.parent() {
             create_dir_all(path_directory).map_err(|e| {
-                error!("Nie można utworzyć katalogu: {}", e);
+                error!("Cannot create directory: {}", e);
                 e
             })?;
         }
 
         let mut file = File::create(file_path).map_err(|e| {
-            error!("Nie można utworzyć pliku: {}", e);
+            error!("Cannot create file: {}", e);
             e
         })?;
 
         file.write_all(task_contents.as_bytes()).map_err(|e| {
-            error!("Nie można zapisać pliku: {}", e);
+            error!("Failed to save file: {}", e);
             e
         })?;
 
@@ -72,17 +72,27 @@ impl Task {
     pub fn get_default_save_file() -> String {
         return Task::make_save_file_patch(
             Task::get_deafult_directory(),
-            "atuoSaving.json".to_string(),
+            "autoSavingDev.json".to_string(),
         );
     }
 
     pub fn read_auto_save_content(
         file_path: &str,
     ) -> Result<Vec<Task>, Box<dyn std::error::Error>> {
-        let mut file = File::open(file_path).unwrap();
+        let mut file = File::open(file_path).map_err(|e| {
+            error!("Cannot open file: {}", e);
+            e
+        })?;
         let mut content = String::new();
-        file.read_to_string(&mut content).unwrap(); // skonczyłem jak obsłużyć bład wrócę tutaj potem
-        let tasks: Vec<Task> = serde_json::from_str(&content)?;
+        file.read_to_string(&mut content).map_err(|e| {
+            error!("Failed to read a file content: {}", e);
+            e
+        })?;
+        let tasks: Vec<Task> = serde_json::from_str(&content).map_err(|e| {
+            error!("Failed to parse JSON: {}", e);
+            e
+        })?;
+
         Ok(tasks)
     }
 }
@@ -138,7 +148,6 @@ mod tests {
 
     #[test]
     fn read_auto_save_content_manual() {
-
         match Task::read_auto_save_content(&Task::get_default_save_file()) {
             Ok(tasks) => {
                 for task in tasks {
