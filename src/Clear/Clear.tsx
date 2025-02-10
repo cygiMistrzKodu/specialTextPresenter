@@ -1,14 +1,18 @@
-
 interface IClear {
   state: (arg: string) => void;
-  onClear:(arg: string) => void;
+  resetDoneStatus: (isDone: boolean) => void;
+  resetTaskInfo: (content: string) => void;
 }
 
-const Clear = ({ state, onClear: onStateChange }: IClear) => {
-
+const Clear = ({
+  state,
+  resetTaskInfo: resetTaskInfo,
+  resetDoneStatus: resetDoneStatus,
+}: IClear) => {
   const clearTaskInfo = () => {
     state("");
-    onStateChange("");
+    resetDoneStatus(false);
+    resetTaskInfo("");
   };
 
   return (

@@ -1,18 +1,34 @@
+import { useEffect } from "react";
+
 interface IToDo {
-  setIsDone: (arg: boolean) => void;
+  onIsDoneChange: (arg: boolean) => void;
   isDone: boolean;
   setTaskBgColor: (arg: string) => void;
 }
 
-const ToDo = ({ isDone, setIsDone, setTaskBgColor }: IToDo) => {
+const ToDo = ({
+  isDone,
+  onIsDoneChange: onIsDoneChange,
+  setTaskBgColor,
+}: IToDo) => {
   const isTaskDone = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setIsDone(event.target.checked);
+    onIsDoneChange(event.target.checked);
+  };
 
-    if (event.target.checked) {
-      setTaskBgColor("bg-black");
+  useEffect(() => {
+    if (isDone) {
+      taskDoneColor();
     } else {
-      setTaskBgColor("bg-green-700");
+      taskNotYetDoneColor();
     }
+  }, [isDone]);
+
+  const taskDoneColor = () => {
+    setTaskBgColor("bg-black");
+  };
+
+  const taskNotYetDoneColor = () => {
+    setTaskBgColor("bg-green-700");
   };
 
   return (

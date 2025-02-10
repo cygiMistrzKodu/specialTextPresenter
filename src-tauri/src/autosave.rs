@@ -8,6 +8,8 @@ use std::path::Path;
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Task {
     pub content: String,
+    #[serde(rename = "isDone")]
+    pub is_done: bool
 }
 
 impl Task {
@@ -34,6 +36,7 @@ impl Task {
                 Some(t) => t,
                 None => Task {
                     content: "".to_string(),
+                    is_done: false,
                 },
             })
             .collect();
@@ -116,10 +119,12 @@ mod tests {
 
         let task = Task {
             content: "cost tam tekst 19".to_string(),
+            is_done: false
         };
 
         let task2 = Task {
             content: "cost tam tekst 15".to_string(),
+            is_done: false
         };
 
         let tasks = Some(vec![Some(task), Some(task2)]);

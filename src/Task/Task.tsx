@@ -10,24 +10,37 @@ import Clear from "../Clear";
 import ToDo from "../ToDo";
 
 interface TaskContentProps {
-  onChange: (taskContent: string) => void;
-  setContent: string;
+  onTaskInfoChange: (content: string) => void;
+  content: string;
+  isTaskDone: boolean;
+  isTaskStatusChange: (taksStatus: boolean) => void;
 }
 
 const Task: React.FC<TaskContentProps> = ({
-  onChange: onTaskInfoChange,
-  setContent: content, 
+  onTaskInfoChange: onTaskInfoChange,
+  content: content,
+  isTaskDone: isTaskDone,
+  isTaskStatusChange: isTaskStatusChange,
 }) => {
   const [taskInfo, setTaskInfo] = useState("");
   const taskInfoRef: RefObject<HTMLTextAreaElement> = useRef(null);
 
-  const [isDone, setIsDone] = useState(false);
   const [taskBgColor, setTaskBgColor] = useState("bg-green-700");
 
   const taskInfoChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     setTaskInfo(event.target.value);
     onTaskInfoChange(event.target.value);
   };
+
+  const [isDone, setIsDone] = useState(false);
+
+  useEffect(() => {
+    isTaskStatusChange(isDone);
+  }, [isDone]);
+
+  useEffect(() => {
+    setIsDone(isTaskDone);
+  }, [isTaskDone]);
 
   useEffect(() => {
     setTaskInfo(content);
@@ -43,6 +56,11 @@ const Task: React.FC<TaskContentProps> = ({
   useEffect(() => {
     adjustTaskHeight();
   }, [taskInfo]);
+
+  const onIsDoneChange = (isTaskDone: boolean) => {
+    setIsDone(isTaskDone);
+    isTaskStatusChange(isTaskDone);
+  };
 
   return (
     <div
@@ -60,13 +78,17 @@ const Task: React.FC<TaskContentProps> = ({
         />
         <ToDo
           isDone={isDone}
-          setIsDone={setIsDone}
+          onIsDoneChange={onIsDoneChange}
           setTaskBgColor={setTaskBgColor}
         ></ToDo>
       </div>
       <div className="flex justify-between">
         <Copy text={taskInfo} />
-        <Clear state={setTaskInfo} onClear={onTaskInfoChange} />
+        <Clear
+          state={setTaskInfo}
+          resetTaskInfo={onTaskInfoChange}
+          resetDoneStatus={onIsDoneChange}
+        />
       </div>
     </div>
   );
