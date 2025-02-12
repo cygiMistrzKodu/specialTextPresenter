@@ -7,12 +7,16 @@ use std::path::Path;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Task {
-    pub content: String,
+    content: String,
     #[serde(rename = "isDone")]
-    pub is_done: bool
+    is_done: bool,
 }
 
 impl Task {
+    pub fn new(content: String, is_done: bool) -> Self {
+        Self { content, is_done }
+    }
+
     fn get_appdata_path() -> String {
         return env::var("APPDATA").map_err(|e| e.to_string()).unwrap();
     }
@@ -34,10 +38,7 @@ impl Task {
             .into_iter()
             .map(|task| match task {
                 Some(t) => t,
-                None => Task {
-                    content: "".to_string(),
-                    is_done: false,
-                },
+                None => Task::new("".to_string(), false),
             })
             .collect();
 
@@ -117,15 +118,8 @@ mod tests {
     fn make_save_file_manula_test() {
         print!("{}", Task::get_default_save_file());
 
-        let task = Task {
-            content: "cost tam tekst 19".to_string(),
-            is_done: false
-        };
-
-        let task2 = Task {
-            content: "cost tam tekst 15".to_string(),
-            is_done: false
-        };
+        let task = Task::new("cost tam tekst 19".to_string(), false);
+        let task2 = Task::new("cost tam tekst 15".to_string(), false);
 
         let tasks = Some(vec![Some(task), Some(task2)]);
 
