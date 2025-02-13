@@ -118,9 +118,13 @@ const MainScrren = () => {
             }
           />
         ))}
+        <div>
+          <button className="btn btn-outline btn-accent btn-lg">
+            <i className="fa-solid fa-plus"></i>
+          </button>
+        </div>
       </div>
     </div>
   );
 };
-
 export default MainScrren;
