@@ -118,7 +118,7 @@ const MainScrren = () => {
             }
           />
         ))}
-        <div>
+        <div className="flex items-center justify-center  min-w-[200px] min-h-[100px] p-2 m-1 ">
           <button className="btn btn-outline btn-accent btn-lg">
             <i className="fa-solid fa-plus"></i>
           </button>
