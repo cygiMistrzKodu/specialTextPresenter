@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Task from "../Task";
 
 import { invoke } from "@tauri-apps/api/core";
@@ -38,7 +38,7 @@ const MainScrren = () => {
   const makeEmptyTasksIfNone = () => {
     useEffect(() => {
       if (taskContents.length === 0) {
-        const emptyTasks: TaskContent[] = [...Array(25)].map((_) => ({
+        const emptyTasks: TaskContent[] = [...Array(10)].map((_) => ({
           content: "",
           isDone: false,
         }));
@@ -48,17 +48,26 @@ const MainScrren = () => {
   };
   makeEmptyTasksIfNone();
 
+  const taskContentRef = useRef(taskContents);
+  useEffect(() => {
+    taskContentRef.current = taskContents;
+  }, [taskContents]);
+
   const saveByCtrlPlusS = () => {
     useEffect(() => {
-      const handleKeyDown = (e: KeyboardEvent) => {
+      const runSaveToStoreOnKeyDown = (e: KeyboardEvent) => {
         if ((e.ctrlKey || e.metaKey) && e.key === "s") {
           e.preventDefault();
           toAutoSave();
         }
       };
 
-      window.addEventListener("keydown", handleKeyDown);
-    }, [taskContents]);
+      window.addEventListener("keydown", runSaveToStoreOnKeyDown);
+
+      return () => {
+        window.removeEventListener("keydown", runSaveToStoreOnKeyDown);
+      };
+    }, []);
   };
   saveByCtrlPlusS();
 
@@ -77,7 +86,8 @@ const MainScrren = () => {
   };
 
   const toAutoSave = async () => {
-    await invoke("auto_save_tasks", { taskContents });
+    const currentContents = taskContentRef.current;
+    await invoke("auto_save_tasks", { taskContents: currentContents });
   };
 
   const readAutoSave = async () => {
@@ -85,6 +95,34 @@ const MainScrren = () => {
     const readTasks: TaskContent[] = await invoke("read_saved_tasks_contents");
     setTaskContents(readTasks);
   };
+
+  const addTask = () => {
+    setTaskContents((prevContents) => [
+      ...prevContents,
+      {
+        content: "",
+        isDone: false,
+      },
+    ]);
+  };
+
+  const addTaskByKeyCtrlPlusD = () => {
+    useEffect(() => {
+      const ctrlPlusDKeyDownAddTask = (e: KeyboardEvent) => {
+        if ((e.ctrlKey || e.metaKey) && e.key === "d") {
+          e.preventDefault();
+          addTask();
+        }
+      };
+      window.addEventListener("keydown", ctrlPlusDKeyDownAddTask);
+
+      return () => {
+        window.removeEventListener("keydown", ctrlPlusDKeyDownAddTask);
+      };
+    }, []);
+  };
+  addTaskByKeyCtrlPlusD();
+
   return (
     <div className="h-screen w-screen bg-gray-700 overflow-auto">
       <h1 className="text-3xl font-bold underline text-yellow-500 text-center">
@@ -119,7 +157,10 @@ const MainScrren = () => {
           />
         ))}
         <div className="flex items-center justify-center  min-w-[200px] min-h-[100px] p-2 m-1 ">
-          <button className="btn btn-outline btn-accent btn-lg">
+          <button
+            className="btn btn-outline btn-accent btn-lg"
+            onClick={addTask}
+          >
             <i className="fa-solid fa-plus"></i>
           </button>
         </div>

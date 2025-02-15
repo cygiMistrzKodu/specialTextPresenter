@@ -32,14 +32,16 @@ const Task: React.FC<TaskContentProps> = ({
     onTaskInfoChange(event.target.value);
   };
 
-  const [isDone, setIsDone] = useState(false);
+  const [isDone, setIsDone] = useState(isTaskDone); // to rozwiązało problem z bugieme
 
   useEffect(() => {
     isTaskStatusChange(isDone);
   }, [isDone]);
 
   useEffect(() => {
-    setIsDone(isTaskDone);
+    if (isDone !== isTaskDone) {
+      setIsDone(isTaskDone);
+    }
   }, [isTaskDone]);
 
   useEffect(() => {
