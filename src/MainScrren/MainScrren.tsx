@@ -106,6 +106,14 @@ const MainScrren = () => {
     ]);
   };
 
+  const removeLastTask = () => {
+    setTaskContents((prevContents) => {
+      if (prevContents.length === 0) return prevContents;
+
+      return prevContents.slice(0, -1);
+    });
+  };
+
   const addTaskByKeyCtrlPlusD = () => {
     useEffect(() => {
       const ctrlPlusDKeyDownAddTask = (e: KeyboardEvent) => {
@@ -162,6 +170,12 @@ const MainScrren = () => {
             onClick={addTask}
           >
             <i className="fa-solid fa-plus"></i>
+          </button>
+          <button
+            className="btn btn-outline btn-secondary btn-lg ms-5"
+            onClick={removeLastTask}
+          >
+            <i className="fa-solid fa-minus"></i>
           </button>
         </div>
       </div>
