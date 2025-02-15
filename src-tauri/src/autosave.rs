@@ -1,4 +1,4 @@
-use log::{error, info, warn};
+use log::error;
 use serde::{Deserialize, Serialize};
 use std::env;
 use std::fs::{create_dir_all, File};
