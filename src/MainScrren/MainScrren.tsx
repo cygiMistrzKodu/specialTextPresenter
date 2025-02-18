@@ -153,6 +153,12 @@ const MainScrren = () => {
     });
   };
 
+  const removeDoneTasks = () => {
+    setTaskContents((prevContents) => {
+      return prevContents.filter((task) => task.isDone !== true);
+    });
+  };
+
   return (
     <div className="h-screen w-screen bg-gray-700 overflow-auto">
       <h1 className="text-3xl font-bold underline text-yellow-500 text-center">
@@ -174,8 +180,15 @@ const MainScrren = () => {
           read
         </button>
         <button
-          onClick={removeEmptyTasks}
+          onClick={removeDoneTasks}
           className="ml-auto bg-gradient-to-r from-red-400 to-red-800 text-white px-4 py-2 rounded-lg shadow-lg
+         hover:shadow-xl transform hover:scale-105 transition-transform duration-200"
+        >
+          remove done
+        </button>
+        <button
+          onClick={removeEmptyTasks}
+          className="bg-gradient-to-r from-red-400 to-red-800 text-white px-4 py-2 rounded-lg shadow-lg
          hover:shadow-xl transform hover:scale-105 transition-transform duration-200"
         >
           remove empty
