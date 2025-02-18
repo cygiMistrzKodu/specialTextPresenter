@@ -32,8 +32,7 @@ const Task: React.FC<TaskContentProps> = ({
     onTaskInfoChange(event.target.value);
   };
 
-  const [isDone, setIsDone] = useState(isTaskDone); // to rozwiązało problem z bugieme
-
+  const [isDone, setIsDone] = useState(isTaskDone);
   useEffect(() => {
     isTaskStatusChange(isDone);
   }, [isDone]);
@@ -64,6 +63,14 @@ const Task: React.FC<TaskContentProps> = ({
     isTaskStatusChange(isTaskDone);
   };
 
+  const onBlureTrimTekst = () => {
+    setTaskInfo((taskInfo) => {
+      const taskInfoTrimmed = taskInfo.trim();
+      onTaskInfoChange(taskInfoTrimmed);
+      return taskInfoTrimmed;
+    });
+  };
+
   return (
     <div
       className={`w-36 rounded  shadow-lg  ${taskBgColor}
@@ -77,6 +84,7 @@ const Task: React.FC<TaskContentProps> = ({
           onChange={taskInfoChange}
           className="resize-none w-full bg-inherit overflow-hidden p-1 font-thin m-1"
           placeholder="Wpisz text"
+          onBlur={onBlureTrimTekst}
         />
         <ToDo
           isDone={isDone}

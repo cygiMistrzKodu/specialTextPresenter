@@ -86,8 +86,14 @@ const MainScrren = () => {
   };
 
   const toAutoSave = async () => {
-    const currentContents = taskContentRef.current;
-    await invoke("auto_save_tasks", { taskContents: currentContents });
+    const currentTasks = taskContentRef.current;
+
+    const tasksWithTrimmedContents = currentTasks.map((task) => ({
+      ...task,
+      content: task.content.trim(),
+    }));
+
+    await invoke("auto_save_tasks", { taskContents: tasksWithTrimmedContents });
   };
 
   const readAutoSave = async () => {
@@ -149,7 +155,7 @@ const MainScrren = () => {
 
   const removeEmptyTasks = () => {
     setTaskContents((prevContents) => {
-      return prevContents.filter((task) => task.content !== "");
+      return prevContents.filter((task) => task.content.trim() !== "");
     });
   };
 
