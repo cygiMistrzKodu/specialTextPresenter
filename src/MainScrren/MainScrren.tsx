@@ -168,29 +168,25 @@ const MainScrren = () => {
   const [toDoTasksCount, setToDoTaskCount] = useState<number>(0);
 
   const countToDoTasks = (tasks: TaskContent[]): number => {
-    return tasks.filter(
-      (task) => task.isDone === false && task.content !== ""
-    ).length;
+    return tasks.filter((task) => task.isDone === false && task.content !== "")
+      .length;
   };
 
   const [doneTasksCount, setDoneTasksCount] = useState<number>(0);
- 
+
   const countDoneTasks = (tasks: TaskContent[]): number => {
-    return tasks.filter(
-      (task) => task.isDone === true && task.content !== ""
-    ).length;
+    return tasks.filter((task) => task.isDone === true && task.content !== "")
+      .length;
   };
 
   const [emptyTasksCount, setEmptyTasksCount] = useState<number>(0);
- 
+
   const countEmptyTasks = (tasks: TaskContent[]): number => {
-    return tasks.filter(
-      (task) => task.content === ""
-    ).length;
+    return tasks.filter((task) => task.content === "").length;
   };
 
   const [allTaskCount, setAllTaskCount] = useState<number>(0);
- 
+
   const countAllTasks = (tasks: TaskContent[]): number => {
     return tasks.length;
   };
@@ -208,9 +204,19 @@ const MainScrren = () => {
         <h1 className="text-3xl font-bold underline text-yellow-500 text-center">
           Tasks
         </h1>
-        <div className="ms-4 countdown font-mono text-4xl">
-          ToDo:{toDoTasksCount} Done:{doneTasksCount} Empty:
-          {emptyTasksCount} all:{allTaskCount}
+        <div className="ms-6">
+          <span className="countdown font-mono text-4xl bg-gradient-to-r from-black to-blue-700">
+            ToDo:{toDoTasksCount}
+          </span>
+          <span className="countdown font-mono text-4xl ms-6 bg-gradient-to-r from-black to-rose-800">
+            Done:{doneTasksCount}
+          </span>
+          <span className="countdown font-mono text-4xl ms-6 bg-gradient-to-r from-black to-lime-800">
+            Empty:{emptyTasksCount}
+          </span>
+          <span className="countdown font-mono text-4xl ms-6 bg-gradient-to-r from-black to-green-700">
+            all:{allTaskCount}
+          </span>
         </div>
       </div>
       <div className="flex  gap-2 m-2">
