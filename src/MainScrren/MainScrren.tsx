@@ -165,11 +165,54 @@ const MainScrren = () => {
     });
   };
 
+  const [toDoTasksCount, setToDoTaskCount] = useState<number>(0);
+
+  const countToDoTasks = (tasks: TaskContent[]): number => {
+    return tasks.filter(
+      (task) => task.isDone === false && task.content !== ""
+    ).length;
+  };
+
+  const [doneTasksCount, setDoneTasksCount] = useState<number>(0);
+ 
+  const countDoneTasks = (tasks: TaskContent[]): number => {
+    return tasks.filter(
+      (task) => task.isDone === true && task.content !== ""
+    ).length;
+  };
+
+  const [emptyTasksCount, setEmptyTasksCount] = useState<number>(0);
+ 
+  const countEmptyTasks = (tasks: TaskContent[]): number => {
+    return tasks.filter(
+      (task) => task.content === ""
+    ).length;
+  };
+
+  const [allTaskCount, setAllTaskCount] = useState<number>(0);
+ 
+  const countAllTasks = (tasks: TaskContent[]): number => {
+    return tasks.length;
+  };
+
+  useEffect(() => {
+    setToDoTaskCount(countToDoTasks(taskContents));
+    setDoneTasksCount(countDoneTasks(taskContents));
+    setEmptyTasksCount(countEmptyTasks(taskContents));
+    setAllTaskCount(countAllTasks(taskContents));
+  }, [taskContents]);
+
   return (
     <div className="h-screen w-screen bg-gray-700 overflow-auto">
-      <h1 className="text-3xl font-bold underline text-yellow-500 text-center">
-        Zadania
-      </h1>
+      <div className="flex justify-center">
+        <h1 className="text-3xl font-bold underline text-yellow-500 text-center">
+          Tasks
+        </h1>
+        <div className="ms-4 countdown font-mono text-4xl">
+          ToDo:{toDoTasksCount} Done:{doneTasksCount} Empty:
+          {emptyTasksCount} all:{allTaskCount}
+        </div>
+      </div>
       <div className="flex  gap-2 m-2">
         <button
           onClick={toAutoSave}
