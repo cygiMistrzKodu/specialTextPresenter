@@ -1,19 +1,58 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import CountFiled from "../CountFiled";
+import { TaskContent  } from '../types'
 
 interface ITaskCountStatistic {
-  test: string
+  tasks: TaskContent[]
 }
-// statystyksa liczeni tasków tu będize
-const TaskCountStatistic = ({ test }: ITaskCountStatistic) => {
 
-  useEffect(() => {
-    console.log(`TaskCountStatistic mounted`)
-  }, [])
+const TaskCountStatistic = ({ tasks }: ITaskCountStatistic) => {
+
+  const [toDoTasksCount, setToDoTaskCount] = useState<number>(0);
+  
+    const countToDoTasks = (tasks: TaskContent[]): number => {
+      return tasks.filter((task) => task.isDone === false && task.content !== "")
+        .length;
+    };
+  
+    const [doneTasksCount, setDoneTasksCount] = useState<number>(0);
+  
+    const countDoneTasks = (tasks: TaskContent[]): number => {
+      return tasks.filter((task) => task.isDone === true && task.content !== "")
+        .length;
+    };
+  
+    const [emptyTasksCount, setEmptyTasksCount] = useState<number>(0);
+  
+    const countEmptyTasks = (tasks: TaskContent[]): number => {
+      return tasks.filter((task) => task.content === "").length;
+    };
+  
+    const [allTaskCount, setAllTaskCount] = useState<number>(0);
+  
+    const countAllTasks = (tasks: TaskContent[]): number => {
+      return tasks.length;
+    };
+
+    useEffect(() => {
+      setToDoTaskCount(countToDoTasks(tasks));
+      setDoneTasksCount(countDoneTasks(tasks));
+      setEmptyTasksCount(countEmptyTasks(tasks));
+      setAllTaskCount(countAllTasks(tasks));
+    }, [tasks]);
 
   return (
-    <div className="TaskCountStatistic-component">
-      Test content
-    </div>
+    <div className="flex justify-center">
+        <h1 className="text-3xl font-bold underline text-yellow-500 text-center">
+          Tasks
+        </h1>
+        <div className="ms-6">
+          <CountFiled title="ToDo" count={toDoTasksCount} gradientColorFrom="black" gradinetColorTo="blue-700" />
+          <CountFiled title="Done" count={doneTasksCount} gradientColorFrom="black" gradinetColorTo="rose-800" />
+          <CountFiled title="Empty" count={emptyTasksCount} gradientColorFrom="black" gradinetColorTo="lime-800" />
+          <CountFiled title="All" count={allTaskCount} gradientColorFrom="black" gradinetColorTo="green-700" />
+        </div>
+      </div>
   )
 }
 

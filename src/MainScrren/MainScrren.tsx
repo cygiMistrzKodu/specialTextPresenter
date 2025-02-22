@@ -3,13 +3,9 @@ import Task from "../Task";
 
 import { invoke } from "@tauri-apps/api/core";
 import { getCurrentWindow } from "@tauri-apps/api/window";
+import { TaskContent } from "../types";
 
-import CountFiled from "../CountFiled";
-
-interface TaskContent {
-  content: string;
-  isDone: boolean;
-}
+import TaskCountStatistic from "../TaskCountStatistic";
 
 const MainScrren = () => {
   const [taskContents, setTaskContents] = useState<TaskContent[]>([]);
@@ -167,64 +163,9 @@ const MainScrren = () => {
     });
   };
 
-  const [toDoTasksCount, setToDoTaskCount] = useState<number>(0);
-
-  const countToDoTasks = (tasks: TaskContent[]): number => {
-    return tasks.filter((task) => task.isDone === false && task.content !== "")
-      .length;
-  };
-
-  const [doneTasksCount, setDoneTasksCount] = useState<number>(0);
-
-  const countDoneTasks = (tasks: TaskContent[]): number => {
-    return tasks.filter((task) => task.isDone === true && task.content !== "")
-      .length;
-  };
-
-  const [emptyTasksCount, setEmptyTasksCount] = useState<number>(0);
-
-  const countEmptyTasks = (tasks: TaskContent[]): number => {
-    return tasks.filter((task) => task.content === "").length;
-  };
-
-  const [allTaskCount, setAllTaskCount] = useState<number>(0);
-
-  const countAllTasks = (tasks: TaskContent[]): number => {
-    return tasks.length;
-  };
-
-  useEffect(() => {
-    setToDoTaskCount(countToDoTasks(taskContents));
-    setDoneTasksCount(countDoneTasks(taskContents));
-    setEmptyTasksCount(countEmptyTasks(taskContents));
-    setAllTaskCount(countAllTasks(taskContents));
-  }, [taskContents]);
-
   return (
     <div className="h-screen w-screen bg-gray-700 overflow-auto">
-      <div className="flex justify-center">
-        <h1 className="text-3xl font-bold underline text-yellow-500 text-center">
-          Tasks
-        </h1>
-        <div className="ms-6">
-          {/* <span className="countdown font-mono text-4xl bg-gradient-to-r from-black to-blue-700">
-            ToDo:{toDoTasksCount}
-          </span> */}
-          <CountFiled title="ToDo" count={toDoTasksCount} gradientColorFrom="black" gradinetColorTo="blue-700" />
-          {/* <span className="countdown font-mono text-4xl ms-6 bg-gradient-to-r from-black to-rose-800">
-            Done:{doneTasksCount}
-          </span> */}
-          <CountFiled title="Done" count={doneTasksCount} gradientColorFrom="black" gradinetColorTo="rose-800" />
-          {/* <span className="countdown font-mono text-4xl ms-6 bg-gradient-to-r from-black to-lime-800">
-            Empty:{emptyTasksCount}
-          </span> */}
-          <CountFiled title="Empty" count={emptyTasksCount} gradientColorFrom="black" gradinetColorTo="lime-800" />
-          {/* <span className="countdown font-mono text-4xl ms-6 bg-gradient-to-r from-black to-green-700">
-            all:{allTaskCount}
-          </span> */}
-          <CountFiled title="All" count={allTaskCount} gradientColorFrom="black" gradinetColorTo="green-700" />
-        </div>
-      </div>
+      <TaskCountStatistic tasks={taskContents} />
       <div className="flex  gap-2 m-2">
         <button
           onClick={toAutoSave}
