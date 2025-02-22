@@ -4,6 +4,8 @@ import Task from "../Task";
 import { invoke } from "@tauri-apps/api/core";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 
+import CountFiled from "../CountFiled";
+
 interface TaskContent {
   content: string;
   isDone: boolean;
@@ -205,18 +207,22 @@ const MainScrren = () => {
           Tasks
         </h1>
         <div className="ms-6">
-          <span className="countdown font-mono text-4xl bg-gradient-to-r from-black to-blue-700">
+          {/* <span className="countdown font-mono text-4xl bg-gradient-to-r from-black to-blue-700">
             ToDo:{toDoTasksCount}
-          </span>
-          <span className="countdown font-mono text-4xl ms-6 bg-gradient-to-r from-black to-rose-800">
+          </span> */}
+          <CountFiled title="ToDo" count={toDoTasksCount} gradientColorFrom="black" gradinetColorTo="blue-700" />
+          {/* <span className="countdown font-mono text-4xl ms-6 bg-gradient-to-r from-black to-rose-800">
             Done:{doneTasksCount}
-          </span>
-          <span className="countdown font-mono text-4xl ms-6 bg-gradient-to-r from-black to-lime-800">
+          </span> */}
+          <CountFiled title="Done" count={doneTasksCount} gradientColorFrom="black" gradinetColorTo="rose-800" />
+          {/* <span className="countdown font-mono text-4xl ms-6 bg-gradient-to-r from-black to-lime-800">
             Empty:{emptyTasksCount}
-          </span>
-          <span className="countdown font-mono text-4xl ms-6 bg-gradient-to-r from-black to-green-700">
+          </span> */}
+          <CountFiled title="Empty" count={emptyTasksCount} gradientColorFrom="black" gradinetColorTo="lime-800" />
+          {/* <span className="countdown font-mono text-4xl ms-6 bg-gradient-to-r from-black to-green-700">
             all:{allTaskCount}
-          </span>
+          </span> */}
+          <CountFiled title="All" count={allTaskCount} gradientColorFrom="black" gradinetColorTo="green-700" />
         </div>
       </div>
       <div className="flex  gap-2 m-2">
