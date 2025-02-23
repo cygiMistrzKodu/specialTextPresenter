@@ -17,9 +17,14 @@ const CountFiled = ({
     console.log(`CountFiled mounted`);
   }, []);
 
+  const gradientStyle = {
+    background: `linear-gradient(to right, ${gradientColorFrom}, ${gradinetColorTo})`
+  };
+
   return (
     <span
-      className={`countdown font-mono text-4xl ms-6 bg-gradient-to-r from-${gradientColorFrom} to-${gradinetColorTo}`}
+      className="countdown font-mono text-4xl ms-6"
+      style={gradientStyle}
     >
       {title}:{count}
     </span>

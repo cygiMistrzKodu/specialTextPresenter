@@ -47,10 +47,10 @@ const TaskCountStatistic = ({ tasks }: ITaskCountStatistic) => {
           Tasks
         </h1>
         <div className="ms-6">
-          <CountFiled title="ToDo" count={toDoTasksCount} gradientColorFrom="black" gradinetColorTo="blue-700" />
-          <CountFiled title="Done" count={doneTasksCount} gradientColorFrom="black" gradinetColorTo="rose-800" />
-          <CountFiled title="Empty" count={emptyTasksCount} gradientColorFrom="black" gradinetColorTo="lime-800" />
-          <CountFiled title="All" count={allTaskCount} gradientColorFrom="black" gradinetColorTo="green-700" />
+          <CountFiled title="ToDo" count={toDoTasksCount} gradientColorFrom="black" gradinetColorTo="#005ce6" />
+          <CountFiled title="Done" count={doneTasksCount} gradientColorFrom="black" gradinetColorTo="#800000" />
+          <CountFiled title="Empty" count={emptyTasksCount} gradientColorFrom="black" gradinetColorTo="#558000" />
+          <CountFiled title="All" count={allTaskCount} gradientColorFrom="black" gradinetColorTo="#248f24" />
         </div>
       </div>
   )
