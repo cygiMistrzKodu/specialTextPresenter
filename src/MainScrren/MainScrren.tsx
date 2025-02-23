@@ -6,6 +6,7 @@ import { getCurrentWindow } from "@tauri-apps/api/window";
 import { TaskContent } from "../types";
 
 import TaskCountStatistic from "../TaskCountStatistic";
+import AddRemoveTaskPanel from "../AddRemoveTaskPanel";
 
 const MainScrren = () => {
   const [taskContents, setTaskContents] = useState<TaskContent[]>([]);
@@ -100,41 +101,6 @@ const MainScrren = () => {
     setTaskContents(readTasks);
   };
 
-  const addTask = () => {
-    setTaskContents((prevContents) => [
-      ...prevContents,
-      {
-        content: "",
-        isDone: false,
-      },
-    ]);
-  };
-
-  const removeLastTask = () => {
-    setTaskContents((prevContents) => {
-      if (prevContents.length === 0) return prevContents;
-
-      return prevContents.slice(0, -1);
-    });
-  };
-
-  const addTaskByKeyCtrlPlusD = () => {
-    useEffect(() => {
-      const ctrlPlusDKeyDownAddTask = (e: KeyboardEvent) => {
-        if ((e.ctrlKey || e.metaKey) && e.key === "d") {
-          e.preventDefault();
-          addTask();
-        }
-      };
-      window.addEventListener("keydown", ctrlPlusDKeyDownAddTask);
-
-      return () => {
-        window.removeEventListener("keydown", ctrlPlusDKeyDownAddTask);
-      };
-    }, []);
-  };
-  addTaskByKeyCtrlPlusD();
-
   const resetTasks = () => {
     setTaskContents([]);
   };
@@ -222,20 +188,7 @@ const MainScrren = () => {
             }
           />
         ))}
-        <div className="flex items-center justify-center  min-w-[200px] min-h-[100px] p-2 m-1 ">
-          <button
-            className="btn btn-outline btn-accent btn-lg"
-            onClick={addTask}
-          >
-            <i className="fa-solid fa-plus"></i>
-          </button>
-          <button
-            className="btn btn-outline btn-secondary btn-lg ms-5"
-            onClick={removeLastTask}
-          >
-            <i className="fa-solid fa-minus"></i>
-          </button>
-        </div>
+        <AddRemoveTaskPanel setTaskContents={setTaskContents} />
       </div>
     </div>
   );
