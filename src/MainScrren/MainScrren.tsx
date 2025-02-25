@@ -37,23 +37,6 @@ const MainScrren = () => {
     setTaskContents(newContents);
   };
 
-  // const toAutoSave = async () => {
-  //   const currentTasks = taskContentRef.current;
-
-  //   const tasksWithTrimmedContents = currentTasks.map((task) => ({
-  //     ...task,
-  //     content: task.content.trim(),
-  //   }));
-
-  //   await invoke("auto_save_tasks", { taskContents: tasksWithTrimmedContents });
-  // };
-
-  // const readAutoSave = async () => {
-  //   setTaskContents([]);
-  //   const readTasks: TaskContent[] = await invoke("read_saved_tasks_contents");
-  //   setTaskContents(readTasks);
-  // };
-
   const resetTasks = () => {
     setTaskContents([]);
   };
