@@ -1,6 +1,5 @@
-import { useEffect } from "react";
 
-interface ICountFiled {
+interface CountFiledProps {
   count: number;
   gradientColorFrom: string;
   gradinetColorTo: string;
@@ -12,10 +11,7 @@ const CountFiled = ({
   gradientColorFrom,
   gradinetColorTo,
   title
-}: ICountFiled) => {
-  useEffect(() => {
-    console.log(`CountFiled mounted`);
-  }, []);
+}: CountFiledProps) => {
 
   const gradientStyle = {
     background: `linear-gradient(to right, ${gradientColorFrom}, ${gradinetColorTo})`

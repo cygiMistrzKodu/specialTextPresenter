@@ -1,38 +1,14 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import Task from "../Task";
 
-import { invoke } from "@tauri-apps/api/core";
-import { getCurrentWindow } from "@tauri-apps/api/window";
 import { TaskContent } from "../types";
 
 import TaskCountStatistic from "../TaskCountStatistic";
 import AddRemoveTaskPanel from "../AddRemoveTaskPanel";
+import StorePanel from "../StorePanel";
 
 const MainScrren = () => {
   const [taskContents, setTaskContents] = useState<TaskContent[]>([]);
-
-  const saveToStoreWhenApplicationIsClosing = () => {
-    useEffect(() => {
-      const closeHandler = async () => {
-        await toAutoSave();
-        await getCurrentWindow().destroy();
-      };
-
-      const unlisten = getCurrentWindow().onCloseRequested(closeHandler);
-
-      return () => {
-        unlisten.then((fn) => fn());
-      };
-    }, [taskContents]);
-  };
-  saveToStoreWhenApplicationIsClosing();
-
-  const readfromAutoSaveStore = () => {
-    useEffect(() => {
-      readAutoSave();
-    }, []);
-  };
-  readfromAutoSaveStore();
 
   const makeEmptyTasksIfNone = () => {
     useEffect(() => {
@@ -46,29 +22,6 @@ const MainScrren = () => {
     }, [taskContents]);
   };
   makeEmptyTasksIfNone();
-
-  const taskContentRef = useRef(taskContents);
-  useEffect(() => {
-    taskContentRef.current = taskContents;
-  }, [taskContents]);
-
-  const saveByCtrlPlusS = () => {
-    useEffect(() => {
-      const runSaveToStoreOnKeyDown = (e: KeyboardEvent) => {
-        if ((e.ctrlKey || e.metaKey) && e.key === "s") {
-          e.preventDefault();
-          toAutoSave();
-        }
-      };
-
-      window.addEventListener("keydown", runSaveToStoreOnKeyDown);
-
-      return () => {
-        window.removeEventListener("keydown", runSaveToStoreOnKeyDown);
-      };
-    }, []);
-  };
-  saveByCtrlPlusS();
 
   const taskStatusChange = (index: number, isTaskDone: boolean) => {
     const newContents = [...taskContents];
@@ -84,22 +37,22 @@ const MainScrren = () => {
     setTaskContents(newContents);
   };
 
-  const toAutoSave = async () => {
-    const currentTasks = taskContentRef.current;
+  // const toAutoSave = async () => {
+  //   const currentTasks = taskContentRef.current;
 
-    const tasksWithTrimmedContents = currentTasks.map((task) => ({
-      ...task,
-      content: task.content.trim(),
-    }));
+  //   const tasksWithTrimmedContents = currentTasks.map((task) => ({
+  //     ...task,
+  //     content: task.content.trim(),
+  //   }));
 
-    await invoke("auto_save_tasks", { taskContents: tasksWithTrimmedContents });
-  };
+  //   await invoke("auto_save_tasks", { taskContents: tasksWithTrimmedContents });
+  // };
 
-  const readAutoSave = async () => {
-    setTaskContents([]);
-    const readTasks: TaskContent[] = await invoke("read_saved_tasks_contents");
-    setTaskContents(readTasks);
-  };
+  // const readAutoSave = async () => {
+  //   setTaskContents([]);
+  //   const readTasks: TaskContent[] = await invoke("read_saved_tasks_contents");
+  //   setTaskContents(readTasks);
+  // };
 
   const resetTasks = () => {
     setTaskContents([]);
@@ -133,20 +86,10 @@ const MainScrren = () => {
     <div className="h-screen w-screen bg-gray-700 overflow-auto">
       <TaskCountStatistic tasks={taskContents} />
       <div className="flex  gap-2 m-2">
-        <button
-          onClick={toAutoSave}
-          className="bg-gradient-to-r from-blue-500 to-blue-700 text-white px-4 py-2 rounded-lg shadow-lg
-         hover:shadow-xl transform hover:scale-105 transition-transform duration-200"
-        >
-          save
-        </button>
-        <button
-          onClick={readAutoSave}
-          className="me-10 bg-gradient-to-r from-amber-500 to-amber-700 text-white px-4 py-2 rounded-lg shadow-lg
-         hover:shadow-xl transform hover:scale-105 transition-transform duration-200"
-        >
-          read
-        </button>
+        <StorePanel
+          taskContents={taskContents}
+          setTaskContents={setTaskContents}
+        />
         <button
           onClick={removeDoneTasks}
           className="ml-auto bg-gradient-to-r from-red-400 to-red-800 text-white px-4 py-2 rounded-lg shadow-lg
