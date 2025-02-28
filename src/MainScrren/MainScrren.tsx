@@ -8,6 +8,8 @@ import AddRemoveTaskPanel from "../AddRemoveTaskPanel";
 import StorePanel from "../StorePanel";
 import OptionPanel from "../OptionPanel";
 
+import { invoke } from "@tauri-apps/api/core";
+
 const MainScrren = () => {
   const [taskContents, setTaskContents] = useState<TaskContent[]>([]);
 
@@ -25,6 +27,28 @@ const MainScrren = () => {
     setTaskContents(newContents);
   };
 
+  const sendTo = async (contents: string[]) => {
+    const links = contents.map(
+      (content) => `https://www.youtube.com/results?search_query=${content}`
+    );
+
+    try {
+      await invoke("send_to_browser", { links });
+    } catch (error) {
+      console.error("browser no opening", error);
+    }
+  };
+
+  const onSendClick = () => {
+    if (taskContents.length > 0) {
+      const contentsOfToDoTasks = taskContents
+        .filter((task) => task.isDone === false && task.content !== "")
+        .map((task) => task.content);
+
+      sendTo(contentsOfToDoTasks);
+    }
+  };
+
   return (
     <div className="h-screen w-screen bg-gray-700 overflow-auto">
       <TaskCountStatistic tasks={taskContents} />
@@ -33,8 +57,18 @@ const MainScrren = () => {
           taskContents={taskContents}
           setTaskContents={setTaskContents}
         />
+        <button
+          onClick={onSendClick}
+          className="bg-gradient-to-r from-blue-500 to-blue-700 text-white px-4 py-2 rounded-lg shadow-lg
+         hover:shadow-xl transform hover:scale-105 transition-transform duration-200"
+        >
+          Send Test
+        </button>
         <span className="ml-auto">
-          <OptionPanel taskContents={taskContents} setTaskContents={setTaskContents} />
+          <OptionPanel
+            taskContents={taskContents}
+            setTaskContents={setTaskContents}
+          />
         </span>
       </div>
       <div className="flex flex-wrap justify-start items-start p-2 m-1">
