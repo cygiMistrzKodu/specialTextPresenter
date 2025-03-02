@@ -72,7 +72,7 @@ const MainScrren = () => {
           className="bg-gradient-to-r from-blue-500 to-blue-700 text-white px-4 py-2 rounded-lg shadow-lg
          hover:shadow-xl transform hover:scale-105 transition-transform duration-200"
         >
-          Send
+          send
         </button>
         <select className="select select-info" onChange={onSelectTaskToSend}>
           {taskToSendOptions.map((number) => (
