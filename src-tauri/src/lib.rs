@@ -9,6 +9,7 @@ pub mod browser;
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
+        .plugin(tauri_plugin_store::Builder::default().build())
         .invoke_handler(tauri::generate_handler![
             auto_save_tasks,
             read_saved_tasks_contents,
@@ -29,16 +30,12 @@ fn read_saved_tasks_contents() -> Result<Vec<Task>, String> {
     let tasks =
         Task::read_auto_save_content(&Task::get_default_save_file()).map_err(|e| e.to_string())?;
 
-        
-
     Ok(tasks)
 }
 
-
 #[tauri::command]
 fn send_to_browser(links: Vec<String>) -> Result<(), String> {
-
     open_in_firefox(links);
-    
+
     Ok(())
 }

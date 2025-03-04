@@ -26,5 +26,5 @@ mockall = "0.11.0"
 log = "0.4.25"
 env_logger = "0.11.6"
 sysinfo = "0.33.1"
-
+tauri-plugin-store = "2.2.0"
 
