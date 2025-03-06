@@ -28,21 +28,29 @@ const MainScrren = () => {
 
   return (
     <div className="h-screen w-screen bg-gray-700 overflow-auto">
-      <TaskCountStatistic tasks={taskContents} />
-      <div className="flex  gap-2 m-2">
-        <StorePanel
-          taskContents={taskContents}
-          setTaskContents={setTaskContents}
-        />
-        <SendPanel taskContents={taskContents} />
-        <span className="ml-auto">
-          <OptionPanel
-            taskContents={taskContents}
-            setTaskContents={setTaskContents}
-          />
-        </span>
+      <div className="fixed top-0 w-full z-50 flex flex-col bg-gray-700">
+        <div className="flex z-50 bg-gray-700 w-full p-1">
+          <TaskCountStatistic tasks={taskContents} />
+        </div>
+        <div className="z-50 bg-gray-700 w-full p-2">
+          <div className="flex flex-wrap-reverse  gap-2 m-2 p-2 w-full">
+            <StorePanel
+              taskContents={taskContents}
+              setTaskContents={setTaskContents}
+            />
+            <span className="mb-2">
+            <SendPanel taskContents={taskContents} />
+            </span>
+            <span className="ml-auto mb-3">
+              <OptionPanel
+                taskContents={taskContents}
+                setTaskContents={setTaskContents}
+              />
+            </span>
+          </div>
+        </div>
       </div>
-      <div className="flex flex-wrap justify-start items-start p-2 m-1">
+      <div className="flex flex-wrap justify-start items-start p-2 m-1 mt-96">
         {taskContents.map((taskContent, index) => (
           <Task
             key={index}

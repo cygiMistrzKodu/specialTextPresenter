@@ -42,8 +42,8 @@ const TaskCountStatistic = ({ tasks }: ITaskCountStatistic) => {
     }, [tasks]);
 
   return (
-    <div className="flex justify-center">
-        <h1 className="text-3xl font-bold underline text-yellow-500 text-center">
+    <div className="flex flex-wrap justify-center">
+        <h1 className="text-3xl font-bold underline text-yellow-500 text-center ms-2 mb-1">
           Tasks
         </h1>
         <div className="ms-6">

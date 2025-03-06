@@ -53,7 +53,7 @@ const OptionPanel = ({ taskContents, setTaskContents }: OptionPanelProps) => {
   };
 
   return (
-    <div className="flex gap-2">
+    <div className="flex flex-wrap-reverse items-baseline  justify-evenly  gap-2">
       <RemoveDoneTask removeDoneTasks={removeDoneTasks} />
       <RemoveEmptyTask removeEmptyTasks={removeEmptyTasks} />
       <ClearAllTask clearAllTasks={clearAllTasks} />
