@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import Task from "../Task";
 
 import { TaskContent } from "../types";
@@ -26,9 +26,45 @@ const MainScrren = () => {
     setTaskContents(newContents);
   };
 
+  const [topFixedPaneHeight, setTopFixedPaneHeight] = useState(0);
+  const topFixedPanelRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        if (entry.target instanceof HTMLElement) {
+          setTopFixedPaneHeight(entry.target.offsetHeight);
+        }
+      },
+      { root: null, rootMargin: "0px", threshold: 1.0 }
+    );
+
+    const handleResize = () => {
+      if (topFixedPanelRef.current) {
+        setTopFixedPaneHeight(topFixedPanelRef.current.offsetHeight);
+      }
+    };
+
+    if (topFixedPanelRef.current) {
+      observer.observe(topFixedPanelRef.current);
+      window.addEventListener("resize", handleResize);
+    }
+
+    return () => {
+      if (topFixedPanelRef.current) {
+        observer.unobserve(topFixedPanelRef.current);
+        window.removeEventListener("resize", handleResize);
+      }
+    };
+  }, []);
+
   return (
-    <div className="h-screen w-screen bg-gray-700 overflow-auto">
-      <div className="fixed top-0 w-full z-50 flex flex-col bg-gray-700">
+    <div className="h-screen w-screen bg-gray-700 overflow-auto overflow-x-hidden">
+      <div
+        ref={topFixedPanelRef}
+        className="fixed top-0 w-full z-50 flex flex-col bg-gray-700"
+      >
         <div className="flex z-50 bg-gray-700 w-full p-1">
           <TaskCountStatistic tasks={taskContents} />
         </div>
@@ -39,7 +75,7 @@ const MainScrren = () => {
               setTaskContents={setTaskContents}
             />
             <span className="mb-2">
-            <SendPanel taskContents={taskContents} />
+              <SendPanel taskContents={taskContents} />
             </span>
             <span className="ml-auto mb-3">
               <OptionPanel
@@ -50,7 +86,10 @@ const MainScrren = () => {
           </div>
         </div>
       </div>
-      <div className="flex flex-wrap justify-start items-start p-2 m-1 mt-96">
+      <div
+        style={{ marginTop: topFixedPaneHeight }}
+        className="flex flex-wrap justify-start items-start p-2 m-1"
+      >
         {taskContents.map((taskContent, index) => (
           <Task
             key={index}
