@@ -100,7 +100,7 @@ const MainScrren = () => {
         ref={topFixedPanelRef}
         className="fixed top-0 w-full z-40 flex flex-col bg-gray-700"
       >
-        <div className="navbar bg-base-100 shadow-sm z-50 py-0">
+        <div className="navbar bg-base-100 shadow-sm z-50  min-h-3 py-0">
           <div className="navbar-start">
             <div className="dropdown">
               <div
