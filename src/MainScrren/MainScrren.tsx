@@ -8,6 +8,7 @@ import AddRemoveTaskPanel from "../AddRemoveTaskPanel";
 import StorePanel from "../StorePanel";
 import OptionPanel from "../OptionPanel";
 import SendPanel from "../SendPanel";
+import VisibilityMenuElement from "../VisibilityMenuElement";
 
 const MainScrren = () => {
   const [taskContents, setTaskContents] = useState<TaskContent[]>([]);
@@ -114,66 +115,27 @@ const MainScrren = () => {
                 tabIndex={0}
                 className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 p-2 w-44 shadow z-50"
               >
-                <div className="flex justify-between w-full mt-1">
-                  <label
-                    htmlFor="visibilityStatisitcPanelOption"
-                    className="flex-grow cursor-pointer"
-                  >
-                    show statistic
-                  </label>
-                  <input
-                    id="visibilityStatisitcPanelOption"
-                    type="checkbox"
-                    className="checkbox checkbox-primary ms-2"
-                    checked={isStatisticPanelVisible}
-                    onChange={onStatisticPanelVisibilityChange}
-                  />
-                </div>
-                <div className="flex justify-between w-full mt-1">
-                  <label
-                    htmlFor="visibilityOptionPanel"
-                    className="flex-grow cursor-pointer"
-                  >
-                    show option panel
-                  </label>
-                  <input
-                    id="visibilityOptionPanel"
-                    type="checkbox"
-                    className="checkbox checkbox-primary ms-2"
-                    checked={isOptionPanelVisible}
-                    onChange={onOptionPanellVisibilityChange}
-                  />
-                </div>
-                <div className="flex justify-between w-full mt-1">
-                  <label
-                    htmlFor="visibilitySendPanel"
-                    className="flex-grow cursor-pointer"
-                  >
-                    show send panel
-                  </label>
-                  <input
-                    id="visibilitySendPanel"
-                    type="checkbox"
-                    className="checkbox checkbox-primary ms-2"
-                    checked={isSendPanelVisible}
-                    onChange={onSendPanellVisibilityChange}
-                  />
-                </div>
-                <div className="flex justify-between w-full mt-1">
-                  <label
-                    htmlFor="visibilityStorePanel"
-                    className="flex-grow cursor-pointer"
-                  >
-                    show store panel
-                  </label>
-                  <input
-                    id="visibilityStorePanel"
-                    type="checkbox"
-                    className="checkbox checkbox-primary ms-2"
-                    checked={isStorePanelVisible}
-                    onChange={onStorePanellVisibilityChange}
-                  />
-                </div>
+                <VisibilityMenuElement
+                  title="show statistic"
+                  visiblityState={isStatisticPanelVisible}
+                  onVisiblityChange={onStatisticPanelVisibilityChange}
+                />
+                <VisibilityMenuElement
+                  title="show option panel"
+                  visiblityState={isOptionPanelVisible}
+                  onVisiblityChange={onOptionPanellVisibilityChange}
+                />
+
+                <VisibilityMenuElement
+                  title="show send panel"
+                  visiblityState={isSendPanelVisible}
+                  onVisiblityChange={onSendPanellVisibilityChange}
+                />
+                <VisibilityMenuElement
+                  title="show store panel"
+                  visiblityState={isStorePanelVisible}
+                  onVisiblityChange={onStorePanellVisibilityChange}
+                />
               </ul>
             </div>
           </div>
