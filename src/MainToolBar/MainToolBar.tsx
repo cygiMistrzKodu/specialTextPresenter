@@ -99,7 +99,7 @@ const MainToolBar = ({
               role="button"
               className="btn btn-ghost btn-circle"
             >
-              Visibility
+              <i className="fa-regular fa-eye fa-2x" title="Visibility"></i>
             </div>
             <ul
               tabIndex={0}
@@ -136,7 +136,7 @@ const MainToolBar = ({
         </div>
       )}
       <div className="z-10 bg-gray-700 w-full p-2">
-        <div className="flex flex-wrap-reverse  gap-2 m-2 p-2 w-full">
+        <div className="flex flex-wrap-reverse  gap-2 m-1 pe-5 w-full">
           <div className={`${isStorePanelVisible ? "block" : "hidden"}`}>
             <StorePanel
               taskContents={taskContents}
