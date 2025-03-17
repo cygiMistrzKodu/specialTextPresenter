@@ -6,6 +6,7 @@ import OptionPanel from "../OptionPanel";
 import SendPanel from "../SendPanel";
 import VisibilityMenuElement from "../VisibilityMenuElement";
 import { TaskContent } from "../types";
+import { Store } from "@tauri-apps/plugin-store";
 
 interface MainToolBarProps {
   taskContents: TaskContent[];
@@ -85,6 +86,66 @@ const MainToolBar = ({
     isSendPanelVisible,
     isStorePanelVisible,
   ]);
+
+  const [store, setStore] = useState<Store | null>(null);
+
+  useEffect(() => {
+    const saveToStore = async () => {
+      if (store !== null) {
+        await store.set("isStatisticPanelVisible", isStatisticPanelVisible);
+        await store.set("isTaskOptionsPanelVisible", isTaskOptionsPanelVisible);
+        await store.set("isSendPanelVisible", isSendPanelVisible);
+        await store.set("isStorePanelVisible", isStorePanelVisible);
+        await store.save();
+      }
+    };
+    saveToStore();
+  }, [
+    store,
+    isStatisticPanelVisible,
+    isTaskOptionsPanelVisible,
+    isSendPanelVisible,
+    isStorePanelVisible,
+  ]);
+
+  useEffect(() => {
+    const initStore = async () => {
+      const storeInstance = await Store.load(
+        "mainToolBarVisibilitySettings.json"
+      );
+      setStore(storeInstance);
+
+      const isStatisticPanelVisibleStore: boolean | undefined =
+        await storeInstance.get("isStatisticPanelVisible");
+
+      if (isStatisticPanelVisibleStore !== undefined) {
+        setIsStatisticPanelVisible(isStatisticPanelVisibleStore);
+      }
+
+      const isTaskOptionsPanelVisibleStore: boolean | undefined =
+        await storeInstance.get("isTaskOptionsPanelVisible");
+
+      if (isTaskOptionsPanelVisibleStore !== undefined) {
+        setIsTaskOptionsPanelVisible(isTaskOptionsPanelVisibleStore);
+      }
+
+      const isSendPanelVisibleStore: boolean | undefined =
+        await storeInstance.get("isSendPanelVisible");
+
+      if (isSendPanelVisibleStore !== undefined) {
+        setIsSendPanelVisible(isSendPanelVisibleStore);
+      }
+
+      const isStorePanelVisibleStore: boolean | undefined =
+        await storeInstance.get("isStorePanelVisible");
+
+      if (isStorePanelVisibleStore !== undefined) {
+        setIsStorePanelVisible(isStorePanelVisibleStore);
+      }
+    };
+
+    initStore();
+  }, []);
 
   return (
     <div
