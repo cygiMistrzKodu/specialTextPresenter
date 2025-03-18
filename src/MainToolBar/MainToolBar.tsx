@@ -89,14 +89,39 @@ const MainToolBar = ({
 
   const [store, setStore] = useState<Store | null>(null);
 
+  const saveVisibilitySettings = async (
+    store: Store,
+    visibilityData: Record<string, boolean>
+  ) => {
+    for (const [key, value] of Object.entries(visibilityData)) {
+      await store.set(key, value);
+    }
+    await store.save();
+  };
+
+  const loadVisibilitySettings = async (
+    store: Store,
+    visiblityKeys: { key: string; setter: (value: boolean) => void }[]
+  ) => {
+    for (const { key, setter } of visiblityKeys) {
+      const value: boolean | undefined = await store.get(key);
+      if (value !== undefined) {
+        setter(value);
+      }
+    }
+  };
+
   useEffect(() => {
     const saveToStore = async () => {
       if (store !== null) {
-        await store.set("isStatisticPanelVisible", isStatisticPanelVisible);
-        await store.set("isTaskOptionsPanelVisible", isTaskOptionsPanelVisible);
-        await store.set("isSendPanelVisible", isSendPanelVisible);
-        await store.set("isStorePanelVisible", isStorePanelVisible);
-        await store.save();
+        const visibilityData = {
+          isStatisticPanelVisible,
+          isTaskOptionsPanelVisible,
+          isSendPanelVisible,
+          isStorePanelVisible,
+        };
+
+        saveVisibilitySettings(store, visibilityData);
       }
     };
     saveToStore();
@@ -115,33 +140,17 @@ const MainToolBar = ({
       );
       setStore(storeInstance);
 
-      const isStatisticPanelVisibleStore: boolean | undefined =
-        await storeInstance.get("isStatisticPanelVisible");
+      const visiblityKeys = [
+        { key: "isStatisticPanelVisible", setter: setIsStatisticPanelVisible },
+        {
+          key: "isTaskOptionsPanelVisible",
+          setter: setIsTaskOptionsPanelVisible,
+        },
+        { key: "isSendPanelVisible", setter: setIsSendPanelVisible },
+        { key: "isStorePanelVisible", setter: setIsStorePanelVisible },
+      ];
 
-      if (isStatisticPanelVisibleStore !== undefined) {
-        setIsStatisticPanelVisible(isStatisticPanelVisibleStore);
-      }
-
-      const isTaskOptionsPanelVisibleStore: boolean | undefined =
-        await storeInstance.get("isTaskOptionsPanelVisible");
-
-      if (isTaskOptionsPanelVisibleStore !== undefined) {
-        setIsTaskOptionsPanelVisible(isTaskOptionsPanelVisibleStore);
-      }
-
-      const isSendPanelVisibleStore: boolean | undefined =
-        await storeInstance.get("isSendPanelVisible");
-
-      if (isSendPanelVisibleStore !== undefined) {
-        setIsSendPanelVisible(isSendPanelVisibleStore);
-      }
-
-      const isStorePanelVisibleStore: boolean | undefined =
-        await storeInstance.get("isStorePanelVisible");
-
-      if (isStorePanelVisibleStore !== undefined) {
-        setIsStorePanelVisible(isStorePanelVisibleStore);
-      }
+      loadVisibilitySettings(storeInstance, visiblityKeys);
     };
 
     initStore();
