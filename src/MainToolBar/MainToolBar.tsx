@@ -7,6 +7,7 @@ import SendPanel from "../SendPanel";
 import VisibilityMenuElement from "../VisibilityMenuElement";
 import { TaskContent } from "../types";
 import { Store } from "@tauri-apps/plugin-store";
+import { eventBus } from "../utils/eventBus";
 
 interface MainToolBarProps {
   taskContents: TaskContent[];
@@ -156,24 +157,42 @@ const MainToolBar = ({
     initStore();
   }, []);
 
+  const [isSavingIconVisible, setIsSavingIconVisible] = useState(false);
+
+  useEffect(() => {
+    const showSaveIcon = () => {
+      setIsSavingIconVisible(true);
+
+      setTimeout(() => {
+        setIsSavingIconVisible(false);
+      }, 2000);
+    };
+
+    eventBus.on("save", showSaveIcon);
+
+    return () => {
+      eventBus.off("save", showSaveIcon);
+    };
+  }, []);
+
   return (
     <div
       ref={mainToolBarRef}
-      className="fixed top-0 w-full z-40 flex flex-col bg-gray-700"
+      className="flex flex-col bg-gray-700 w-full fixed top-0 z-40"
     >
-      <div className="navbar bg-base-100 shadow-sm z-50  min-h-3 py-0">
+      <div className="navbar bg-base-100 shadow-sm min-h-3 py-0 z-50">
         <div className="navbar-start">
           <div className="dropdown">
             <div
               tabIndex={0}
               role="button"
-              className="btn btn-ghost btn-circle"
+              className="btn btn-circle btn-ghost"
             >
-              <i className="fa-regular fa-eye fa-2x" title="Visibility"></i>
+              <i className="fa-2x fa-eye fa-regular" title="Visibility"></i>
             </div>
             <ul
               tabIndex={0}
-              className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 p-2 w-44 shadow z-50"
+              className="dropdown-content bg-base-100 p-2 rounded-box shadow w-44 menu menu-sm z-1 z-50"
             >
               <VisibilityMenuElement
                 title="show statistic"
@@ -199,14 +218,19 @@ const MainToolBar = ({
             </ul>
           </div>
         </div>
+        {isSavingIconVisible && (
+          <div className="flex justify-center">
+            <i className="text-green-500 animate-bounce fa-2x fa-save fas"></i>
+          </div>
+        )}
       </div>
       {isStatisticPanelVisible && (
-        <div className="flex z-10 bg-gray-700 w-full p-1">
+        <div className="flex bg-gray-700 p-1 w-full z-10">
           <TaskCountStatistic tasks={taskContents} />
         </div>
       )}
-      <div className="z-10 bg-gray-700 w-full p-2">
-        <div className="flex flex-wrap-reverse  gap-2 m-1 pe-5 w-full">
+      <div className="bg-gray-700 p-2 w-full z-10">
+        <div className="flex flex-wrap-reverse m-1 w-full gap-2 pe-5">
           <div className={`${isStorePanelVisible ? "block" : "hidden"}`}>
             <StorePanel
               taskContents={taskContents}
@@ -219,7 +243,7 @@ const MainToolBar = ({
             </span>
           )}
           {isTaskOptionsPanelVisible && (
-            <span className="ml-auto mb-3">
+            <span className="mb-3 ml-auto">
               <OptionPanel
                 taskContents={taskContents}
                 setTaskContents={setTaskContents}

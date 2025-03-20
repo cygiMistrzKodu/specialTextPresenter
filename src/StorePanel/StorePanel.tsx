@@ -4,6 +4,7 @@ import { TaskContent } from "../types";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 import Read from "../Read";
 import Save from "../Save";
+import { eventBus } from "../utils/eventBus";
 
 interface StorePanelProps {
   taskContents: TaskContent[];
@@ -26,6 +27,7 @@ const StorePanel = ({ taskContents, setTaskContents }: StorePanelProps) => {
     }));
 
     await invoke("auto_save_tasks", { taskContents: tasksWithTrimmedContents });
+    eventBus.emit('save')
   };
 
   const saveToStoreWhenApplicationIsClosing = () => {
