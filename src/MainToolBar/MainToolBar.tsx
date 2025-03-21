@@ -7,7 +7,7 @@ import SendPanel from "../SendPanel";
 import VisibilityMenuElement from "../VisibilityMenuElement";
 import { TaskContent } from "../types";
 import { Store } from "@tauri-apps/plugin-store";
-import { eventBus } from "../utils/eventBus";
+import SaveIcon from "../SaveIcon";
 
 interface MainToolBarProps {
   taskContents: TaskContent[];
@@ -157,24 +157,6 @@ const MainToolBar = ({
     initStore();
   }, []);
 
-  const [isSavingIconVisible, setIsSavingIconVisible] = useState(false);
-
-  useEffect(() => {
-    const showSaveIcon = () => {
-      setIsSavingIconVisible(true);
-
-      setTimeout(() => {
-        setIsSavingIconVisible(false);
-      }, 2000);
-    };
-
-    eventBus.on("save", showSaveIcon);
-
-    return () => {
-      eventBus.off("save", showSaveIcon);
-    };
-  }, []);
-
   return (
     <div
       ref={mainToolBarRef}
@@ -218,11 +200,7 @@ const MainToolBar = ({
             </ul>
           </div>
         </div>
-        {isSavingIconVisible && (
-          <div className="flex justify-center">
-            <i className="text-green-500 animate-bounce fa-2x fa-save fas"></i>
-          </div>
-        )}
+        <SaveIcon />
       </div>
       {isStatisticPanelVisible && (
         <div className="flex bg-gray-700 p-1 w-full z-10">
