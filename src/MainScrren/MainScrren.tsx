@@ -27,7 +27,7 @@ const MainScrren = () => {
     setMainToolBarHeight(heightInPixels);
   };
 
-  const [backgroundImage, setBackgroundImage] = useState("url('/testImages/image 6.jpg')"); 
+  const [backgroundImage, setBackgroundImage] = useState("url('/testImages/image 8.jpg')"); 
 
   useEffect(() => {
     console.log(backgroundImage);
