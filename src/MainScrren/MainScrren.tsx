@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Task from "../Task";
 import { TaskContent } from "../types";
 import AddRemoveTaskPanel from "../AddRemoveTaskPanel";
@@ -27,8 +27,22 @@ const MainScrren = () => {
     setMainToolBarHeight(heightInPixels);
   };
 
+  const [backgroundImage, setBackgroundImage] = useState("url('/testImages/image 6.jpg')"); 
+
+  useEffect(() => {
+    console.log(backgroundImage);
+  },[backgroundImage])
+  
+
   return (
-    <div className="h-screen w-screen bg-gray-700 overflow-auto overflow-x-hidden">
+    <div className="h-screen w-screen bg-gray-700 overflow-auto overflow-x-hidden " 
+    style={{backgroundImage: backgroundImage,
+      // backgroundSize: "cover",   // ? czy cover czy containe zastnawiams ię 
+      backgroundSize: "contain",
+      backgroundPosition : "center",
+      width: "100vw",
+      height: "100vh"
+    }} >
       <MainToolBar
         taskContents={taskContents}
         setTaskContents={setTaskContents}

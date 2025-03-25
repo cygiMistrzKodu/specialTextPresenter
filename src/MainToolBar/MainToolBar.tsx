@@ -8,6 +8,7 @@ import VisibilityMenuElement from "../VisibilityMenuElement";
 import { TaskContent } from "../types";
 import { Store } from "@tauri-apps/plugin-store";
 import SaveIcon from "../SaveIcon";
+import ChooseBackgroundImage from "../ChooseBackgroundImage";
 
 interface MainToolBarProps {
   taskContents: TaskContent[];
@@ -197,6 +198,18 @@ const MainToolBar = ({
                 visiblityState={isStorePanelVisible}
                 onVisiblityChange={onStorePanellVisibilityChange}
               />
+            </ul>
+          </div>
+          <div className="dropdown">
+            <div
+              tabIndex={0}
+              role="button"
+              className="btn btn-circle btn-ghost"
+            >
+              <i className="fa-solid fa-gears fa-2x"></i>
+            </div>
+            <ul className="dropdown-content bg-base-100 p-2 rounded-box shadow w-64 menu menu-sm z-50">
+              <ChooseBackgroundImage />
             </ul>
           </div>
         </div>
