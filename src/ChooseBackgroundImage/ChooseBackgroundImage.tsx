@@ -38,7 +38,7 @@ const ChooseBackgroundImage = () => {
       if (store !== null) {
         await store.set("backgroundImageSelected", backgroundImageSelected);
         await store.save();
-        eventBus.emit("backgroundImageUpdated");  // i to po tronie wyśweitlajace przechwycić żeby wstawić zapisany z dysku obraz
+        eventBus.emit("backgroundImageUpdated");
       }
     };
     saveToStore();
