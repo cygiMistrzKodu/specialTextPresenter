@@ -20,7 +20,7 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
 
-    "types": ["node"]
+    "types": ["node", "@tauri-apps/plugin-store"]
   },
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]

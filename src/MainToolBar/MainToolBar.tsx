@@ -208,7 +208,10 @@ const MainToolBar = ({
             >
               <i className="fa-solid fa-gears fa-2x"></i>
             </div>
-            <ul className="dropdown-content bg-base-100 p-2 rounded-box shadow w-64 menu menu-sm z-50">
+            <ul
+              className="dropdown-content bg-base-100 p-2
+             rounded-box shadow w-20 menu menu-sm z-50 flex flex-col justify-center items-center"
+            >
               <ChooseBackgroundImage />
             </ul>
           </div>

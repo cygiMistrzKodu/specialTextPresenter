@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import Task from "../Task";
 import { TaskContent } from "../types";
 import AddRemoveTaskPanel from "../AddRemoveTaskPanel";
 import MainToolBar from "../MainToolBar";
+import { Store } from "@tauri-apps/plugin-store";
+import { eventBus } from "../utils/eventBus";
 
 const MainScrren = () => {
   const [taskContents, setTaskContents] = useState<TaskContent[]>([]);
@@ -27,22 +29,64 @@ const MainScrren = () => {
     setMainToolBarHeight(heightInPixels);
   };
 
-  const [backgroundImage, setBackgroundImage] = useState("url('/testImages/image 8.jpg')"); 
+  const [backgroundImage, setBackgroundImage] = useState("");
+
+  const [store, setStore] = useState<Store | null>(null);
+  const [isStoreInitialized, setIsStoreInitialized] = useState(false);
+
+  const loadImage = useCallback(async () => {
+    if (store) {
+      const savedImage = await store.get<string>("backgroundImageSelected");
+      if (savedImage) {
+        setBackgroundImage(savedImage);
+      }
+    }
+  }, [store]);
+
+  const initStoreAndLoadImage = useCallback(async () => {
+    if (isStoreInitialized) {
+      return;
+    }
+
+    try {
+      const storeInstance = await Store.load("backgroundImageSettings.json");
+      setStore(storeInstance);
+      const saveImage = await storeInstance.get<string>(
+        "backgroundImageSelected"
+      );
+      if (saveImage !== undefined) {
+        setBackgroundImage(saveImage);
+      } else {
+        console.log("no saved image file");
+      }
+      setIsStoreInitialized(true);
+    } catch (error) {
+      console.log("initalsiation of store problem or reading image", error);
+    }
+  }, []);
 
   useEffect(() => {
-    console.log(backgroundImage);
-  },[backgroundImage])
-  
+    if (!isStoreInitialized) {
+      initStoreAndLoadImage();
+    }
+    eventBus.on("backgroundImageUpdated", loadImage);
+
+    return () => {
+      eventBus.off("backgroundImageUpdated", loadImage);
+    };
+  }, [initStoreAndLoadImage, loadImage, isStoreInitialized]);
 
   return (
-    <div className="h-screen w-screen bg-gray-700 overflow-auto overflow-x-hidden " 
-    style={{backgroundImage: backgroundImage,
-      // backgroundSize: "cover",   // ? czy cover czy containe zastnawiams ię 
-      backgroundSize: "contain",
-      backgroundPosition : "center",
-      width: "100vw",
-      height: "100vh"
-    }} >
+    <div
+      className="h-screen w-screen bg-gray-700 overflow-auto overflow-x-hidden "
+      style={{
+        backgroundImage: `url(${backgroundImage})`,
+        backgroundSize: "contain",
+        backgroundPosition: "center",
+        width: "100vw",
+        height: "100vh",
+      }}
+    >
       <MainToolBar
         taskContents={taskContents}
         setTaskContents={setTaskContents}
