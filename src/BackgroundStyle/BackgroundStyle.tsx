@@ -2,7 +2,9 @@ import { useEffect, useState, useCallback } from "react";
 import { Store } from "@tauri-apps/plugin-store";
 import { eventBus } from "../utils/eventBus";
 
-const BackgroundImage = () => {
+const BackgroundStyle: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const [store, setStore] = useState<Store | null>(null);
   const [isStoreInitialized, setIsStoreInitialized] = useState(false);
 
@@ -50,13 +52,20 @@ const BackgroundImage = () => {
     };
   }, [initStoreAndLoadImage, loadImage, isStoreInitialized]);
 
-  return {
-    backgroundImage: `url(${backgroundImage})`,
-    backgroundSize: "contain",
-    backgroundPosition: "center",
-    width: "100vw",
-    height: "100vh",
-  };
+  return (
+    <div
+      className="h-screen w-screen bg-gray-700 overflow-auto overflow-x-hidden "
+      style={{
+        backgroundImage: `url(${backgroundImage})`,
+        backgroundSize: "contain",
+        backgroundPosition: "center",
+        width: "100vw",
+        height: "100vh",
+      }}
+    >
+      {children}
+    </div>
+  );
 };
 
-export default BackgroundImage;
+export default BackgroundStyle;

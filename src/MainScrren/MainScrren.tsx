@@ -3,7 +3,8 @@ import Task from "../Task";
 import { TaskContent } from "../types";
 import AddRemoveTaskPanel from "../AddRemoveTaskPanel";
 import MainToolBar from "../MainToolBar";
-import BackgroundImage from "../BackgroundImage";
+import BackgroundStyle from "../BackgroundStyle";
+BackgroundStyle;
 
 const MainScrren = () => {
   const [taskContents, setTaskContents] = useState<TaskContent[]>([]);
@@ -28,13 +29,8 @@ const MainScrren = () => {
     setMainToolBarHeight(heightInPixels);
   };
 
-  const backgroundImage = BackgroundImage();
-
   return (
-    <div
-      className="h-screen w-screen bg-gray-700 overflow-auto overflow-x-hidden "
-      style={backgroundImage}
-    >
+    <BackgroundStyle>
       <MainToolBar
         taskContents={taskContents}
         setTaskContents={setTaskContents}
@@ -57,7 +53,7 @@ const MainScrren = () => {
         ))}
         <AddRemoveTaskPanel setTaskContents={setTaskContents} />
       </div>
-    </div>
+    </BackgroundStyle>
   );
 };
 export default MainScrren;
