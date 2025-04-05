@@ -6,7 +6,6 @@ const BackgroundStyle: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [store, setStore] = useState<Store | null>(null);
-  const [isStoreInitialized, setIsStoreInitialized] = useState(false);
 
   const [backgroundImage, setBackgroundImage] = useState("");
 
@@ -20,7 +19,7 @@ const BackgroundStyle: React.FC<{ children: React.ReactNode }> = ({
   }, [store]);
 
   const initStoreAndLoadImage = useCallback(async () => {
-    if (isStoreInitialized) {
+    if (store) {
       return;
     }
 
@@ -35,22 +34,19 @@ const BackgroundStyle: React.FC<{ children: React.ReactNode }> = ({
       } else {
         console.log("no saved image file");
       }
-      setIsStoreInitialized(true);
     } catch (error) {
       console.log("initalsiation of store problem or reading image", error);
     }
-  }, []);
+  }, [store]);
 
   useEffect(() => {
-    if (!isStoreInitialized) {
-      initStoreAndLoadImage();
-    }
+    initStoreAndLoadImage();
     eventBus.on("backgroundImageUpdated", loadImage);
 
     return () => {
       eventBus.off("backgroundImageUpdated", loadImage);
     };
-  }, [initStoreAndLoadImage, loadImage, isStoreInitialized]);
+  }, [initStoreAndLoadImage, loadImage]);
 
   return (
     <div
