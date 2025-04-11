@@ -8,12 +8,22 @@ const BackgroundStyle: React.FC<{ children: React.ReactNode }> = ({
   const [store, setStore] = useState<Store | null>(null);
 
   const [backgroundImage, setBackgroundImage] = useState("");
+  const [backgroundImageSizeOptions, setBackgroundImageSizeOptions] = useState<
+    "contain" | "cover" | undefined
+  >(undefined);
 
   const loadImage = useCallback(async () => {
     if (store) {
       const savedImage = await store.get<string>("backgroundImageSelected");
       if (savedImage) {
         setBackgroundImage(savedImage);
+      }
+
+      const imageOption = await store.get<"contain" | "cover">(
+        "imageOptionSizeSelected"
+      );
+      if (imageOption) {
+        setBackgroundImageSizeOptions(imageOption);
       }
     }
   }, [store]);
@@ -26,16 +36,8 @@ const BackgroundStyle: React.FC<{ children: React.ReactNode }> = ({
     try {
       const storeInstance = await Store.load("backgroundImageSettings.json");
       setStore(storeInstance);
-      const saveImage = await storeInstance.get<string>(
-        "backgroundImageSelected"
-      );
-      if (saveImage !== undefined) {
-        setBackgroundImage(saveImage);
-      } else {
-        console.log("no saved image file");
-      }
     } catch (error) {
-      console.log("initalsiation of store problem or reading image", error);
+      console.log("initalsiation of store problem", error);
     }
   }, [store]);
 
@@ -53,7 +55,7 @@ const BackgroundStyle: React.FC<{ children: React.ReactNode }> = ({
       className="h-screen w-screen bg-gray-700 overflow-auto overflow-x-hidden "
       style={{
         backgroundImage: `url(${backgroundImage})`,
-        backgroundSize: "contain",
+        backgroundSize: backgroundImageSizeOptions || "contain",
         backgroundPosition: "center",
         width: "100vw",
         height: "100vh",

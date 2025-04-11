@@ -6,6 +6,10 @@ const ChooseBackgroundImage = () => {
   const [imagePreview, setImagePreview] = useState("");
   const [backgroundImageSelected, setBackgroundImageSelected] = useState("");
 
+  const [backgroundImageSizeOptions, setBackgroundImageSizeOptions] = useState<
+    "contain" | "cover" | undefined
+  >(undefined);
+
   const dialogRef = useRef<HTMLDialogElement>(null);
 
   const openModal = () => {
@@ -35,26 +39,36 @@ const ChooseBackgroundImage = () => {
 
   useEffect(() => {
     const saveToStore = async () => {
-      if (store !== null) {
+      if (store !== null && backgroundImageSizeOptions !== undefined) {
         await store.set("backgroundImageSelected", backgroundImageSelected);
+
+        await store.set("imageOptionSizeSelected", backgroundImageSizeOptions);
+
         await store.save();
         eventBus.emit("backgroundImageUpdated");
       }
     };
     saveToStore();
-  }, [backgroundImageSelected, store]);
+  }, [backgroundImageSelected, backgroundImageSizeOptions, store]);
 
   useEffect(() => {
     const initStore = async () => {
       const storeInstance = await Store.load("backgroundImageSettings.json");
       setStore(storeInstance);
 
-      const val: string | undefined = await storeInstance.get(
+      const backgroundImage: string | undefined = await storeInstance.get(
         "backgroundImageSelected"
       );
-      if (val !== undefined) {
-        setBackgroundImageSelected(val);
-        setImagePreview(val);
+      if (backgroundImage !== undefined) {
+        setBackgroundImageSelected(backgroundImage);
+        setImagePreview(backgroundImage);
+      }
+
+      const imageOptionSize: "contain" | "cover" | undefined =
+        await storeInstance.get("imageOptionSizeSelected");
+
+      if (imageOptionSize !== undefined) {
+        setBackgroundImageSizeOptions(imageOptionSize);
       }
     };
     initStore();
@@ -63,6 +77,12 @@ const ChooseBackgroundImage = () => {
   const onSelectImageConfirmation = () => {
     setBackgroundImageSelected(imagePreview);
     closeModal();
+  };
+
+  const backgroundImageSizeChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setBackgroundImageSizeOptions(event.target.value as "contain" | "cover");
   };
 
   return (
@@ -93,6 +113,33 @@ const ChooseBackgroundImage = () => {
               Ok
             </button>
           </div>
+          <div className="flex flex-col justify-center items-center">
+            <h1 className="text-2xl font-bold mt-4">Options</h1>
+            <div className="form-control flex flex-row items-center space-x-4">
+              <label className="label cursor-pointer">
+                <span className="label-text me-2">contain</span>
+                <input
+                  type="radio"
+                  name="backgroundImageSizeChoose"
+                  value="contain"
+                  checked={backgroundImageSizeOptions == "contain"}
+                  className="radio radio-primary"
+                  onChange={backgroundImageSizeChange}
+                />
+              </label>
+              <label className="label cursor-pointer">
+                <span className="label-text me-2">cover</span>
+                <input
+                  type="radio"
+                  name="backgroundImageSizeChoose"
+                  value="cover"
+                  checked={backgroundImageSizeOptions == "cover"}
+                  className="radio radio-primary"
+                  onChange={backgroundImageSizeChange}
+                />
+              </label>
+            </div>
+          </div>
           <div className="modal-action">
             <div className="flex justify-center items-center">
               {imagePreview && (
@@ -102,7 +149,7 @@ const ChooseBackgroundImage = () => {
                   style={{
                     width: "500px",
                     height: "400px",
-                    objectFit: "contain",
+                    objectFit: backgroundImageSizeOptions || "contain",
                   }}
                 />
               )}
