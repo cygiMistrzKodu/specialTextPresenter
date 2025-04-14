@@ -7,7 +7,9 @@ const BackgroundStyle: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [store, setStore] = useState<Store | null>(null);
 
-  const [backgroundImage, setBackgroundImage] = useState("");
+  const [backgroundImage, setBackgroundImage] = useState<undefined | string>(
+    ""
+  );
   const [backgroundImageSizeOptions, setBackgroundImageSizeOptions] = useState<
     "contain" | "cover" | undefined
   >(undefined);
@@ -15,9 +17,7 @@ const BackgroundStyle: React.FC<{ children: React.ReactNode }> = ({
   const loadImage = useCallback(async () => {
     if (store) {
       const savedImage = await store.get<string>("backgroundImageSelected");
-      if (savedImage) {
-        setBackgroundImage(savedImage);
-      }
+      setBackgroundImage(savedImage);
 
       const imageOption = await store.get<"contain" | "cover">(
         "imageOptionSizeSelected"

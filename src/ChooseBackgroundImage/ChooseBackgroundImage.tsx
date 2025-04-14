@@ -12,6 +12,8 @@ const ChooseBackgroundImage = () => {
 
   const dialogRef = useRef<HTMLDialogElement>(null);
 
+  const fileImageInputRef = useRef<HTMLInputElement>(null);
+
   const openModal = () => {
     if (dialogRef.current) {
       dialogRef.current.showModal();
@@ -85,6 +87,16 @@ const ChooseBackgroundImage = () => {
     setBackgroundImageSizeOptions(event.target.value as "contain" | "cover");
   };
 
+  const onRemoveImage = () => {
+    setBackgroundImageSelected("");
+    setBackgroundImageSizeOptions("contain");
+    setImagePreview("");
+
+    if (fileImageInputRef.current) {
+      fileImageInputRef.current.value = "";
+    }
+  };
+
   return (
     <div>
       <button className="btn btn-neutral" onClick={openModal}>
@@ -104,6 +116,7 @@ const ChooseBackgroundImage = () => {
               type="file"
               className="file-input file-input-bordered file-input-primary"
               accept="image/*"
+              ref={fileImageInputRef}
               onChange={chooseImage}
             />
             <button
@@ -115,7 +128,7 @@ const ChooseBackgroundImage = () => {
           </div>
           <div className="flex flex-col justify-center items-center">
             <h1 className="text-2xl font-bold mt-4">Options</h1>
-            <div className="form-control flex flex-row items-center space-x-4">
+            <div className="form-control flex flex-row items-center justify-center w-full space-x-4">
               <label className="label cursor-pointer">
                 <span className="label-text me-2">contain</span>
                 <input
@@ -131,13 +144,19 @@ const ChooseBackgroundImage = () => {
                 <span className="label-text me-2">cover</span>
                 <input
                   type="radio"
-                  name="backgroundImageSizeChoose"
+                  name="backgroundgeSizeChoose"
                   value="cover"
                   checked={backgroundImageSizeOptions == "cover"}
                   className="radio radio-primary"
                   onChange={backgroundImageSizeChange}
                 />
               </label>
+              <button
+                className="btn btn-neutral ml-auto absolute right-9"
+                onClick={onRemoveImage}
+              >
+                Reset
+              </button>
             </div>
           </div>
           <div className="modal-action">
